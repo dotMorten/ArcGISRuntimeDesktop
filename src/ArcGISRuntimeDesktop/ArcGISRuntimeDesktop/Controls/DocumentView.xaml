@@ -1,0 +1,40 @@
+﻿<UserControl
+    x:Class="ArcGISRuntimeDesktop.Controls.DocumentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ArcGISRuntimeDesktop"
+    xmlns:vm="using:ArcGISRuntimeDesktop.ViewModels"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="mapTemplate" x:DataType="vm:MapDocument">
+            <esri:MapView Map="{x:Bind Map, Mode=OneWay}" PointerMoved="GeoView_PointerMoved" Loaded="GeoView_Loaded"
+                          AllowDrop="True" Drop="GeoView_Drop"
+                          DragOver="GeoView_DragOver"
+                          />
+        </DataTemplate>
+        <DataTemplate x:Key="sceneTemplate" x:DataType="vm:SceneDocument">
+            <esri:SceneView Scene="{x:Bind Scene, Mode=OneWay}" PointerMoved="GeoView_PointerMoved" Loaded="GeoView_Loaded" AmbientLightColor="#111111"
+                            AllowDrop="True" Drop="GeoView_Drop" DragOver="GeoView_DragOver" SunLighting="{x:Bind SunLighting, Mode=OneWay}" SunTime="{x:Bind SunTime, Mode=OneWay}" AtmosphereEffect="{x:Bind AtmosphereEffect, Mode=OneWay}" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+    <ContentControl Content="{x:Bind Document, Mode=OneWay}"
+                    x:Name="ContentArea"
+                    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                    >
+    </ContentControl>
+
+        <StackPanel Orientation="Horizontal" x:Name="StatusArea" Grid.Row="1" Grid.Column="1">
+            <TextBlock x:Name="PointerPosition" HorizontalAlignment="Center" />
+        </StackPanel>
+    </Grid>
+</UserControl>

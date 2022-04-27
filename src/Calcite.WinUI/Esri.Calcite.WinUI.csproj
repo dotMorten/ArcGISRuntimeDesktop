@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows10.0.18362</TargetFramework>
+    <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
+    <UseWinUI>true</UseWinUI>
+    <Authors>Esri Inc.</Authors>
+    <Company>Esri</Company>
+    <Description>ESRI Calcite design resources for WinUI</Description>
+    <Version>0.1.0</Version>
+    <Copyright>Copyright © 2022-$([System.DateTime]::Now.ToString('yyyy')) Esri.</Copyright>
+    <PackageIcon>icon.png</PackageIcon>
+    <GenerateLibraryLayout>True</GenerateLibraryLayout>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Fonts\*.*" PackagePath="lib\$(TargetFramework)\$(AssemblyName)\Fonts\" />
+    <None Remove="Fonts\AvenirNextW1G-Demi.otf" />
+    <None Remove="Icons.xaml" />
+    <None Remove="Icons\**\*.*" />
+    <None Remove="Styles\Controls\TreeView.xaml" />
+    <Content Include="Icons\**\*.svg" PackagePath="lib\$(TargetFramework)\$(AssemblyName)\Icons\" />
+    <None Include="icon.png" Pack="True" PackagePath="\" />
+    <None Include="README.txt" Pack="True" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
+      <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.194" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Styles\Controls\TreeView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+
+	<Target Name="UpdateIcons" BeforeTargets="Build">
+		
+	</Target>
+</Project>

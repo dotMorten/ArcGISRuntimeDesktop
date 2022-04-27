@@ -1,0 +1,23 @@
+﻿<winuiex:WindowEx
+    x:Class="ArcGISRuntimeDesktop.Windows.SignInWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ArcGISRuntimeDesktop"
+    xmlns:winuiex="using:WinUIEx"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    TaskBarIcon="Assets/ArcGIS.ico"
+    mc:Ignorable="d" Width="800" Height="400">
+
+    <Grid RequestedTheme="Dark">
+        <Image Source="ms-appx:///Assets/heroimage.png" Stretch="UniformToFill" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <StackPanel Padding="20" VerticalAlignment="Center" Margin="0,250,0,0">
+            <TextBlock Text="Sign into ArcGIS Online" Foreground="White" HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}"  />
+            <TextBlock Text="An ArcGIS Online Account is required to license this application"  Foreground="White"
+                       FontSize="14" Style="{StaticResource SubheaderTextBlockStyle}" HorizontalAlignment="Center" Margin="10" />
+            <Button Content="Sign in" Click="SignIn_Click" HorizontalAlignment="Center" Margin="10" Width="200" />
+            <TextBlock x:Name="status" HorizontalAlignment="Center" Foreground="White" />
+        </StackPanel>
+
+    </Grid>
+</winuiex:WindowEx>

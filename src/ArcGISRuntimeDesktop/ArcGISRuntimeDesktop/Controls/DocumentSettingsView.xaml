@@ -1,0 +1,48 @@
+﻿<UserControl
+    x:Class="ArcGISRuntimeDesktop.Controls.DocumentSettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ArcGISRuntimeDesktop.Controls"
+    xmlns:mapping="using:Esri.ArcGISRuntime.Mapping"
+    xmlns:esriui="using:Esri.ArcGISRuntime.UI"
+    xmlns:vm="using:ArcGISRuntimeDesktop.ViewModels"
+    xmlns:ogc="using:Esri.ArcGISRuntime.Ogc"
+    xmlns:ctrls="using:ArcGISRuntimeDesktop.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer x:DefaultBindMode="TwoWay">
+        <StackPanel Margin="10">
+
+            <StackPanel Visibility="{x:Bind Document.Is2D, Mode=OneWay}">
+                <ctrls:EnumComboBox SelectedItem="{x:Bind MapDocument.ActiveLocationDisplay.AutoPanMode, Mode=TwoWay}" Header="Location Auto Pan" />
+            </StackPanel>
+            <StackPanel Visibility="{x:Bind Document.Is3D, Mode=OneWay}">
+                <Slider Minimum="0" Maximum="5" Header="Elevation Exaggeration" Value="{x:Bind SceneDocument.Scene.BaseSurface.ElevationExaggeration}" HorizontalAlignment="Stretch" TickFrequency="1" StepFrequency=".1" />
+
+                <ctrls:EnumComboBox SelectedItem="{x:Bind SceneDocument.AtmosphereEffect, Mode=TwoWay}" Header="Atmosphere" >
+                    <ctrls:EnumComboBox.StringMappings>
+                        <ctrls:EnumStringValue EnumValue="HorizonOnly" DisplayName="Horizon" />
+                        <ctrls:EnumStringValue EnumValue="Realistic" DisplayName="Haze" />
+                    </ctrls:EnumComboBox.StringMappings>
+                </ctrls:EnumComboBox>
+
+                <ctrls:EnumComboBox SelectedItem="{x:Bind SceneDocument.SunLighting, Mode=TwoWay}" Header="Light" >
+                    <ctrls:EnumComboBox.StringMappings>
+                        <ctrls:EnumStringValue EnumValue="NoLight" DisplayName="Ambient" />
+                        <ctrls:EnumStringValue EnumValue="Light" DisplayName="Directional" />
+                        <ctrls:EnumStringValue EnumValue="LightAndShadows" DisplayName="Directional and Shadows" />
+                    </ctrls:EnumComboBox.StringMappings>
+                </ctrls:EnumComboBox>
+                
+                <StackPanel Visibility="{x:Bind SceneDocument.IsSunTimeActive, Mode=OneWay}">
+                    <CalendarDatePicker x:Name="timeofyear" Header="Time of year" DateChanged="SuntimeChanged" />
+                    <Slider x:Name="timeofday" Header="Time of day" Minimum="0" Maximum="24" TickFrequency="1" StepFrequency=".25" ValueChanged="SuntimeChanged" />
+                </StackPanel>
+            </StackPanel>
+            
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

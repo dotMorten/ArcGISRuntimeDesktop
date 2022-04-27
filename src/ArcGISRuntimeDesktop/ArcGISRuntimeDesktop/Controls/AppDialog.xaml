@@ -1,0 +1,78 @@
+﻿<UserControl
+    x:Class="ArcGISRuntimeDesktop.Controls.AppDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ArcGISRuntimeDesktop.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="Root"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style TargetType="Grid" x:Key="blotout">
+            <Setter Property="Opacity" Value=".75" />
+            <Setter Property="Background" Value="{ThemeResource Background0}" />
+        </Style>
+    </UserControl.Resources>
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup>
+            <VisualState x:Name="Show">
+                <Storyboard>
+                    <DoubleAnimation From="0" To="1" Duration="00:00:1" 
+                             Storyboard.TargetName="CommonDialogArea" 
+                             Storyboard.TargetProperty="Opacity" />
+                </Storyboard>
+                <!--<VisualState.Setters>
+                    <Setter Property="Visibility" Value="Visible" Target="Root" />
+                </VisualState.Setters>-->
+            </VisualState>
+            <VisualState x:Name="Hide">
+                <Storyboard>
+                    <DoubleAnimation From="1" To="0" Duration="00:00:1" 
+                             Storyboard.TargetName="CommonDialogArea" 
+                             Storyboard.TargetProperty="Opacity" />
+                </Storyboard>
+                <!--<VisualState.Setters>
+                    <Setter Property="Visibility" Value="Collapsed" Target="Root" />
+                </VisualState.Setters>-->
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+    
+    <Grid x:Name="CommonDialogArea">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.ColumnSpan="3" Style="{StaticResource blotout}" />
+        <Grid Grid.ColumnSpan="3" Grid.Row="2" Style="{StaticResource blotout}" />
+        <Grid Grid.Row="1" Style="{StaticResource blotout}" />
+        <Grid Grid.Row="1" Grid.Column="2" Style="{StaticResource blotout}" />
+        <Grid BorderBrush="Black"  CornerRadius="5" BorderThickness="1" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32" />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Opacity="1" Grid.RowSpan="3" Grid.ColumnSpan="3">
+                <Grid.Background>
+                    <AcrylicBrush TintColor="{ThemeResource Background0Color}" />
+                </Grid.Background>
+            </Grid>
+            <Grid Background="{StaticResource TintNormal}" VerticalAlignment="Stretch">
+                <TextBlock x:Name="Title" Style="{StaticResource BaseTextBlockStyle}" VerticalAlignment="Center" Foreground="White" Margin="10,0,0,0" />
+                <AppBarButton Foreground="{ThemeResource Foreground0}" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                              Click="CloseButton_Click" Padding="0" Margin="0" Width="30">
+                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE711;"
+                              Foreground="White" Margin="0,-8,0,8"/>
+                </AppBarButton>
+            </Grid>
+            <ContentControl x:Name="ContentArea" Grid.Row="1" Margin="10" MinWidth="200" MinHeight="150" />
+        </Grid>
+    </Grid>
+</UserControl>

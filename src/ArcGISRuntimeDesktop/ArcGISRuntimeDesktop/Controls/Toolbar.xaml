@@ -1,0 +1,115 @@
+﻿<UserControl
+    x:Class="ArcGISRuntimeDesktop.Controls.Toolbar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ArcGISRuntimeDesktop.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:esriMapping="using:Esri.ArcGISRuntime.Mapping"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style TargetType="DropDownButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        </Style>
+        <SolidColorBrush x:Key="ButtonBackground" Color="Transparent" />
+        <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="SystemControlHighlightListLowBrush" />
+        <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="SystemControlHighlightListMediumBrush" />
+    </UserControl.Resources>
+    <NavigationView x:Name="NavigationViewControl" IsBackButtonVisible="Collapsed"
+                    Grid.Row="0" PaneDisplayMode="Top" ItemInvoked="NavigationViewControl_ItemInvoked">
+        <NavigationView.MenuItems>
+            <NavigationViewItem Content="Project" x:Name="ProjectTab"  IsEnabled="False"/>
+            <NavigationViewItem Content="Map" x:Name="MapTab" IsSelected="True" />
+            <NavigationViewItem Content="Insert" x:Name="InsertTab"  IsEnabled="False"/>
+            <NavigationViewItem Content="Analysis" x:Name="AnalysisTab"  IsEnabled="False"/>
+            <NavigationViewItem Content="View" x:Name="ViewTab"  IsEnabled="False"/>
+            <NavigationViewItem Content="Edit" x:Name="EditTab"  IsEnabled="False"/>
+            <NavigationViewItem Content="Imagery" x:Name="ImageryTab"  IsEnabled="False"/>
+            <NavigationViewItem Content="Share" x:Name="ShareTab"  IsEnabled="False"/>
+        </NavigationView.MenuItems>
+        <NavigationView.Content>
+            <Grid>
+                <StackPanel Visibility="{x:Bind ProjectTab.IsSelected, Mode=OneWay}" Orientation="Horizontal">
+                    <AppBarButton Label="Project" Icon="NewWindow" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Visibility="{x:Bind MapTab.IsSelected, Mode=OneWay}">
+                    <AppBarButton Label="New Map" Click="{x:Bind ViewModel.NewMapDocument}" >
+                        <FontIcon Glyph="{StaticResource calcite_glyphicon_Map}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+                    </AppBarButton>
+                    <AppBarButton Label="New Scene" Click="{x:Bind ViewModel.NewSceneDocument}"  >
+                        <FontIcon Glyph="{StaticResource calcite_glyphicon_Globe}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+                    </AppBarButton>
+                    <AppBarSeparator />
+                    <AppBarButton Label="Full Extent" IsEnabled="False">
+                        <FontIcon Glyph="{StaticResource calcite_glyphicon_ZoomOutFixed}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+                    </AppBarButton>
+                    <AppBarButton Label="Pan" IsEnabled="False">
+                        <FontIcon Glyph="{StaticResource calcite_glyphicon_Pan}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+                    </AppBarButton>
+                    <AppBarButton Label="Zoom" IsEnabled="False">
+                        <FontIcon Glyph="{StaticResource calcite_glyphicon_MagnifyingGlass}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+                    </AppBarButton>
+                    <AppBarButton Label="Select" IsEnabled="False">
+                        <FontIcon Glyph="{StaticResource calcite_glyphicon_LassoSelect}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+                    </AppBarButton>
+                    <AppBarSeparator />
+                    <AppBarButton Label="Paste" Icon="Paste" IsEnabled="False" />
+                    <AppBarButton Label="Cut" Icon="Cut" IsEnabled="False" />
+                    <AppBarSeparator />
+                    <AppBarButton Label="Add Layer" Click="AddLayer_Click">
+                        <FontIcon Glyph="{StaticResource calcite_glyphicon_AddLayer}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+                    </AppBarButton>
+                    <AppBarButton Label="View Data">
+                        <FontIcon Glyph="{StaticResource calcite_glyphicon_Tables}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+                    </AppBarButton>
+                    <AppBarSeparator />
+                    <AppBarButton Label="Explore" Icon="Map" IsEnabled="False" />
+                    <AppBarButton Label="Measure" IsEnabled="False">
+                        <FontIcon Glyph="{StaticResource calcite_glyphicon_Measure}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+                    </AppBarButton>
+                </StackPanel>
+
+                <StackPanel Visibility="{x:Bind InsertTab.IsSelected, Mode=OneWay}" Orientation="Horizontal">
+                    <AppBarButton Label="Insert" Icon="Paste" />
+                </StackPanel>
+            </Grid>
+        </NavigationView.Content>
+        <NavigationView.PaneFooter>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBox PlaceholderText="Search" IsEnabled="False" Width="150" VerticalAlignment="Center" Margin="0,0,0,0"/>
+                <Button VerticalAlignment="Center" Background="Transparent" Padding="0" Width="32" Height="32" Margin="0,0,15,0" >
+                    <FontIcon Glyph="{StaticResource calcite_glyphicon_Search}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+                </Button>
+                <Button BorderThickness="0" Padding="0" Margin="5,0">
+                    <Button.Flyout>
+                        <Flyout Placement="Bottom">
+                            <StackPanel>
+                                <TextBlock Text="{x:Bind ViewModel.PortalUser.FullName, Mode=OneWay}" 
+                                   Style="{StaticResource BodyTextBlockStyle}"
+                                   VerticalAlignment="Center" Margin="5,0,0,0" />
+                                <TextBlock Text="{x:Bind ViewModel.PortalUser.Portal.PortalInfo.OrganizationName, Mode=OneWay}" 
+                                   Style="{StaticResource CaptionTextBlockStyle}"
+                                   VerticalAlignment="Center" Margin="5,0,0,0" />
+                                <HyperlinkButton Content="Sign out" 
+                                                 Margin="0,5,0,0" 
+                                                 HorizontalAlignment="Stretch" Click="SignOut_Click" />
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="32" Height="32" Stroke="Gray" StrokeThickness="1">
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="{x:Bind ViewModel.PortalUserThumbnail, Mode=OneWay}" />
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </NavigationView.PaneFooter>
+    </NavigationView>
+</UserControl>

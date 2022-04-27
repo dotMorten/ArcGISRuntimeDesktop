@@ -1,0 +1,57 @@
+﻿<UserControl
+    x:Class="ArcGISRuntimeDesktop.Controls.AddDataView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ArcGISRuntimeDesktop.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:esriPortal="using:Esri.ArcGISRuntime.Portal"
+    mc:Ignorable="d">
+
+    <Grid MinHeight="500" MaxWidth="800">
+
+        <TabView IsAddTabButtonVisible="False">
+            <TabViewItem Header="Browse" IsClosable="False">
+                
+            </TabViewItem>
+            <TabViewItem Header="ArcGIS Server" IsClosable="False">
+                
+            </TabViewItem>
+            <TabViewItem Header="My Portal" IsClosable="False">
+
+            </TabViewItem>
+            <TabViewItem Header="ArcGIS Online" IsClosable="False">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBox Margin="0,5" AcceptsReturn="False" PlaceholderText="Search" Text="Oil" Header="Search ArcGIS Online" KeyDown="AgoSearchTextBox_KeyDown" x:Name="AgoSearchTextBox" />
+                    <ListView x:Name="AgoSearchResults" Grid.Row="1">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="esriPortal:PortalItem">
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Stretch="UniformToFill" Margin="0,0,5,0">
+                                        <Image.Source>
+                                            <BitmapImage UriSource="{x:Bind ThumbnailUri}" />
+                                        </Image.Source>
+                                    </Image>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{x:Bind Title}" FontWeight="Bold" Style="{StaticResource BaseTextBlockStyle}" />
+                                    <TextBlock Text="{x:Bind Snippet}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+                
+            </TabViewItem>
+        </TabView>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,85 @@
+﻿<UserControl
+    x:Class="ArcGISRuntimeDesktop.Controls.ContentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ArcGISRuntimeDesktop.Controls"
+    xmlns:mapping="using:Esri.ArcGISRuntime.Mapping"
+    xmlns:ogc="using:Esri.ArcGISRuntime.Ogc"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Width="300">
+
+    <ScrollViewer>
+        <StackPanel Margin="10">            
+            <TreeView ItemsSource="{x:Bind Document.GeoDocument.OperationalLayers, Mode=OneWay}" Margin="-25,10,0,0">
+                <TreeView.ItemTemplateSelector>
+                    <local:LayerTemplateSelector>
+                        <local:LayerTemplateSelector.LayerTemplate>
+                            <DataTemplate x:DataType="mapping:ILayerContent">
+                                <TreeViewItem ItemsSource="{x:Bind SublayerContents}" Height="32">
+                                    <TreeViewItem.ContextFlyout>
+                                        <MenuFlyout x:Name="contentFlyout" Opening="contentFlyout_Opening" />
+                                    </TreeViewItem.ContextFlyout>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{x:Bind IsVisible, Mode=TwoWay}" MinWidth="0" Visibility="{x:Bind CanChangeVisibility}" />
+                                        <TextBlock Text="{x:Bind Name, Mode=OneWay}" Margin="5,0,0,0"  Style="{StaticResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </TreeViewItem>
+                            </DataTemplate>
+                        </local:LayerTemplateSelector.LayerTemplate>
+                        <local:LayerTemplateSelector.KmlLayerTemplate>
+                            <DataTemplate x:DataType="mapping:KmlLayer">
+                                <TreeViewItem ItemsSource="{x:Bind Dataset.RootNodes, Mode=OneWay}" Height="32">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{x:Bind IsVisible, Mode=TwoWay}" MinWidth="0" Visibility="{x:Bind CanChangeVisibility}" />
+                                        <TextBlock Text="{x:Bind Name, Mode=OneWay}" Margin="5,0,0,0"  Style="{StaticResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </TreeViewItem>
+                            </DataTemplate>
+                        </local:LayerTemplateSelector.KmlLayerTemplate>
+                        <local:LayerTemplateSelector.KmlContainerTemplate>
+                            <DataTemplate x:DataType="ogc:KmlContainer">
+                                <TreeViewItem ItemsSource="{x:Bind ChildNodes, Mode=OneWay}" Height="32">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{x:Bind IsVisible, Mode=TwoWay}" MinWidth="0" />
+                                        <TextBlock Text="{x:Bind Name, Mode=OneWay}" Margin="5,0,0,0"  Style="{StaticResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </TreeViewItem>
+                            </DataTemplate>
+                        </local:LayerTemplateSelector.KmlContainerTemplate>
+                        <local:LayerTemplateSelector.KmlNetworkLinkTemplate>
+                            <DataTemplate x:DataType="ogc:KmlNetworkLink">
+                                <TreeViewItem ItemsSource="{x:Bind ChildNodes, Mode=OneWay}" Height="32">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{x:Bind IsVisible, Mode=TwoWay}" MinWidth="0" />
+                                        <TextBlock Text="{x:Bind Name, Mode=OneWay}" Margin="5,0,0,0"  Style="{StaticResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </TreeViewItem>
+                            </DataTemplate>
+                        </local:LayerTemplateSelector.KmlNetworkLinkTemplate>
+                        <local:LayerTemplateSelector.KmlNodeTemplate>
+                            <DataTemplate x:DataType="ogc:KmlNetworkLink">
+                                <TreeViewItem  Height="32">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{x:Bind IsVisible, Mode=TwoWay}" MinWidth="0" />
+                                        <TextBlock Text="{x:Bind Name, Mode=OneWay}" Margin="5,0,0,0"  Style="{StaticResource BodyTextBlockStyle}"/>
+                                    </StackPanel>
+                                </TreeViewItem>
+                            </DataTemplate>
+                        </local:LayerTemplateSelector.KmlNodeTemplate>
+                    </local:LayerTemplateSelector>
+                </TreeView.ItemTemplateSelector>
+            </TreeView>
+            <StackPanel>
+                <TextBlock Text="Basemap:" Style="{StaticResource BaseTextBlockStyle}" Margin="0,5" />
+                <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                <FontIcon Glyph="{StaticResource calcite_glyphicon_Basemap}" FontSize="16" FontFamily="{StaticResource Calcite-UI-Icons}" />
+                <TextBlock Text="{x:Bind Document.GeoDocument.Basemap.Name, Mode=OneWay}"
+                           Style="{StaticResource BodyTextBlockStyle}" Margin="5,0,0,0"
+                           />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

@@ -1,0 +1,22 @@
+﻿<winuiex:SplashScreen
+    x:Class="ArcGISRuntimeDesktop.Windows.SplashScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ArcGISRuntimeDesktop"
+    xmlns:winuiex="using:WinUIEx"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" >
+
+    <Grid Background="#130D4E" RequestedTheme="Dark">
+        
+        <Image Source="ms-appx:///Assets/heroimage.png" Stretch="UniformToFill" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <TextBlock Text="ArcGIS Runtime Desktop" HorizontalAlignment="Center" Foreground="White"
+                   VerticalAlignment="Center" Margin="0,250,0,0" Style="{StaticResource TitleTextBlockStyle}" />
+        <StackPanel VerticalAlignment="Bottom">
+            <TextBlock x:Name="status" Text="Loading..." HorizontalAlignment="Center" Foreground="White" />
+            <ProgressBar x:Name="progress" Minimum="0" Maximum="100" HorizontalAlignment="Stretch" Foreground="#AE56FF" 
+                   Margin="10" />
+        </StackPanel>
+    </Grid>
+</winuiex:SplashScreen>

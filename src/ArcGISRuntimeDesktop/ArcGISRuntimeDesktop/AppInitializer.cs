@@ -49,11 +49,12 @@ internal class AppInitializer
             }
             catch (Exception)
             {
+                AuthenticationManager.Current.RemoveAllCredentials(); // Start over
             }
         }
 
         AuthenticationManager.Current.ChallengeHandler = new DefaultChallengeHandler();
-        AuthenticationManager.Current.OAuthAuthorizeHandler = WinAppSDKOAuthAuthorizeHandler.Instance;
+        AuthenticationManager.Current.OAuthAuthorizeHandler = OAuthAuthorizeHandler.Instance;
 
         StatusText = "Checking license...";
         var license = ApplicationViewModel.Instance.AppSettings.License;
@@ -86,6 +87,7 @@ internal class AppInitializer
             catch (OperationCanceledException)
             {
                 App.Current.Exit();
+                return;
             }
         }
 

@@ -11,7 +11,6 @@ public partial class App : Application
     /// </summary>
     public App()
     {
-        WinAppSDKOAuthAuthorizeHandler.OnAppCreation();
         this.InitializeComponent();
         Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
     }

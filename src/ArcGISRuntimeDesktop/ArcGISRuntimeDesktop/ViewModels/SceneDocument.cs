@@ -6,7 +6,7 @@ public class SceneDocument : Document
 
     private static Scene CreateDefaultScene()
     {
-        var scene = new Scene(Basemap.CreateImageryWithLabelsVector());
+        var scene = new Scene(BasemapStyle.ArcGISImageryLabels);
         scene.BaseSurface!.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri(_elevationSourceUrl)));
         return scene;
     }

@@ -10,6 +10,7 @@ public sealed partial class MainWindow : WinUIEx.WindowEx
     {
         this.Width = ApplicationViewModel.Instance.AppSettings.WindowWidth;
         this.Height = ApplicationViewModel.Instance.AppSettings.WindowHeight;
+        this.PersistenceId = "MainWindow";
         this.InitializeComponent();
         this.SizeChanged += MainWindow_SizeChanged;
         this.PositionChanged += MainWindow_PositionChanged;

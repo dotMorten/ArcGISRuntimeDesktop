@@ -6,7 +6,7 @@ public class MapDocument : Document
 {
     private static Map CreateDefaultMap()
     {
-        var map = new Map(Basemap.CreateStreetsVector());
+        var map = new Map(BasemapStyle.ArcGISStreets);
         return map;
     }
     public MapDocument() : this(string.Empty) { }

@@ -29,9 +29,9 @@
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Input" Version="7.1.2" />
     <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="100.14.0" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.3" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.197" />
-    <PackageReference Include="WinUIEx" Version="1.4.0" />
+    <PackageReference Include="WinUIEx" Version="1.5.0" />
     <Manifest Include="$(ApplicationManifest)" />
     
     

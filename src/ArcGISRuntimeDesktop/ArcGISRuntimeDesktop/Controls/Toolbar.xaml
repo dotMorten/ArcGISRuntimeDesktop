@@ -33,7 +33,7 @@
             <NavigationViewItem Content="Share" x:Name="ShareTab"  IsEnabled="False"/>
         </NavigationView.MenuItems>
         <NavigationView.Content>
-            <Grid>
+            <Grid Margin="0,-5,0,0">
                 <StackPanel Visibility="{x:Bind ProjectTab.IsSelected, Mode=OneWay}" Orientation="Horizontal">
                     <AppBarButton Label="Project" Icon="NewWindow" />
                 </StackPanel>

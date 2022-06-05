@@ -11,10 +11,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tk="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d"
-    RequestedTheme="{x:Bind ViewModel.AppSettings.Theme,Mode=OneWay}"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    RequestedTheme="{x:Bind ViewModel.AppSettings.Theme,Mode=OneWay}">
+    <Page.Background>
+        <SolidColorBrush Color="{ThemeResource ControlFillColorDefault}"/>
+    </Page.Background>
 
+    <Page.Resources>
+        <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent"/>        
+    </Page.Resources>
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
             <RowDefinition Height="*" />
@@ -32,7 +38,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <SplitView x:Name="splitViewPane" CompactPaneLength="40" Grid.RowSpan="2" Grid.ColumnSpan="2" DisplayMode="Inline" PanePlacement="Left" IsPaneOpen="True"  >
+            <SplitView x:Name="splitViewPane" PaneBackground="Transparent" CompactPaneLength="40" Grid.RowSpan="2" Grid.ColumnSpan="2" DisplayMode="Inline" PanePlacement="Left" IsPaneOpen="True"  >
                 <SplitView.Pane>
                     <NavigationView PointerPressed="SidePane_PointerPressed" x:Name="SidePane" PaneDisplayMode="LeftCompact" IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False" IsSettingsVisible="False">
                         <NavigationView.MenuItems>

@@ -34,4 +34,5 @@
     <Color x:Key="DangerHoverColor">#FF0015</Color>
     <Color x:Key="DangerPressColor">#D90012</Color>
 
+    <Color x:Key="ControlFillColorDefault">#b3000000</Color>
 </ResourceDictionary>

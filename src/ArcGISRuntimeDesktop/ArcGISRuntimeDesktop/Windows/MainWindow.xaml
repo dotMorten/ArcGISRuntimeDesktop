@@ -9,6 +9,7 @@
     xmlns:ex="using:WinUIEx"
     Title="ArcGIS Runtime Desktop"
     TaskBarIcon="Assets/ArcGIS.ico"
+    Backdrop="Acrylic"
     mc:Ignorable="d">
     <views:RootView  />
 </ex:WindowEx>

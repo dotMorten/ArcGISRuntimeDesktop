@@ -132,7 +132,7 @@ public class ApplicationViewModel : BaseViewModel
         }
     }
 
-    public IEnumerable<Basemap> Basemaps { get; private set; }
+    public IEnumerable<Basemap>? Basemaps { get; private set; }
 
     public ImageSource? PortalUserThumbnail { get; private set; }
 

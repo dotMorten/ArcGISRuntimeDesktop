@@ -35,7 +35,7 @@ public abstract class Document : BaseViewModel
         ViewpointRequested?.Invoke(this, viewpoint);
     }
 
-    public event EventHandler<Viewpoint> ViewpointRequested;
+    public event EventHandler<Viewpoint>? ViewpointRequested;
 
     public async Task<Envelope?> Add(IEnumerable<IStorageItem> items)
     {

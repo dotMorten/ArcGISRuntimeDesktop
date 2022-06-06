@@ -49,8 +49,6 @@ namespace ArcGISRuntimeDesktop.ViewModels
             OnPropertyChanged(key);
         }
 
-        private ElementTheme _theme;
-
         public Microsoft.UI.Xaml.ElementTheme Theme
         {
             get => GetSetting(ElementTheme.Default, nameof(Theme));

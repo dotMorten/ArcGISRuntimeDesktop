@@ -22,7 +22,7 @@ public sealed partial class DocumentSettingsView : UserControl
         DependencyProperty.Register("Document", typeof(Document), typeof(ContentView), new PropertyMetadata(null, (s,e) => ((DocumentSettingsView)s).OnDocumentChanged(e.NewValue as Document)));
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public MapDocument MapDocument
+    public MapDocument? MapDocument
     {
         get { return (MapDocument)GetValue(MapDocumentProperty); }
         set { SetValue(MapDocumentProperty, value); }
@@ -33,7 +33,7 @@ public sealed partial class DocumentSettingsView : UserControl
 
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public SceneDocument SceneDocument
+    public SceneDocument? SceneDocument
     {
         get { return (SceneDocument)GetValue(SceneDocumentProperty); }
         set { SetValue(SceneDocumentProperty, value); }
@@ -52,7 +52,7 @@ public sealed partial class DocumentSettingsView : UserControl
     private void UpdateTime()
     {
         if (SceneDocument is null) return;
-        var time = timeofyear.Date.Value.Date.AddHours(timeofday.Value);
+        var time = timeofyear.Date!.Value.Date.AddHours(timeofday.Value);
         SceneDocument.SunTime = time;
     }
 

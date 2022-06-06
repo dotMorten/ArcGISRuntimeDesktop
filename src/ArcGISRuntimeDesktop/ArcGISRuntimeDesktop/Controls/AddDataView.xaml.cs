@@ -52,7 +52,7 @@ public sealed partial class AddDataView : UserControl
                 {
                     result = await _portal.FindItemsAsync(query);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return loadMoreItemsResult;
                 }

@@ -84,7 +84,7 @@ namespace ArcGISRuntimeDesktop.Controls
     }
     public class EnumStringValue
     {
-        public string EnumValue { get; set; }
-        public string DisplayName { get; set; }
+        public string? EnumValue { get; set; }
+        public string? DisplayName { get; set; }
     }
 }

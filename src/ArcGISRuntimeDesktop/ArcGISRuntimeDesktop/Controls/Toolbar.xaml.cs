@@ -33,9 +33,9 @@ namespace ArcGISRuntimeDesktop.Controls
         }
 
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(ViewModels.ApplicationViewModel), typeof(Toolbar), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(ViewModel), typeof(ViewModels.ApplicationViewModel), typeof(Toolbar), new PropertyMetadata(null));
 
-        object currentNavigationItem;
+        private object? currentNavigationItem;
         private void NavigationViewControl_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if(args.IsSettingsInvoked)

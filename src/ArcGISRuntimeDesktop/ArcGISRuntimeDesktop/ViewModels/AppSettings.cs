@@ -75,16 +75,6 @@ namespace ArcGISRuntimeDesktop.ViewModels
                 SetSetting(value?.ToJson() ?? string.Empty, nameof(License));
             }
         }
-        public double WindowWidth
-        {
-            get => GetSetting(1024d, nameof(WindowWidth));
-            set => SetSetting(value, nameof(WindowWidth));
-        }
-        public double WindowHeight
-        {
-            get => GetSetting(768d, nameof(WindowHeight));
-            set => SetSetting(value, nameof(WindowHeight));
-        }
 
         public bool IsSidePanePinned
         {

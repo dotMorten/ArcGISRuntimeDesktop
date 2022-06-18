@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml.Data;
+﻿using Esri.ArcGISRuntime.Data;
+using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Windows.Foundation;
 using Windows.System;
@@ -70,6 +71,47 @@ public sealed partial class AddDataView : UserControl
                 }
             }
             return loadMoreItemsResult;
+        }
+    }
+
+    private void AddAGODataClick(object sender, RoutedEventArgs e)
+    {
+        var item = (sender as Button).CommandParameter as PortalItem;
+        if (item is null) return;
+        //ApplicationViewModel.Instance.NewMapDocument
+        switch(item.Type)
+        {
+            case PortalItemType.WebMap:
+                var doc = new MapDocument(item.Title, new Map(item));
+                ApplicationViewModel.Instance.AddDocument(doc);
+                ApplicationViewModel.Instance.ActiveDocument = doc;
+                break;
+            case PortalItemType.WebScene:
+                var sdoc = new SceneDocument(item.Title, new Scene(item));
+                ApplicationViewModel.Instance.AddDocument(sdoc);
+                ApplicationViewModel.Instance.ActiveDocument = sdoc;
+                break;
+            case PortalItemType.FeatureService:
+                ApplicationViewModel.Instance.ActiveDocument?.GeoDocument.OperationalLayers.Add(new FeatureLayer(item));
+                break;
+            case PortalItemType.FeatureCollection:
+                ApplicationViewModel.Instance.ActiveDocument?.GeoDocument.OperationalLayers.Add(new FeatureCollectionLayer(new FeatureCollection(item)));
+                break;
+            case PortalItemType.VectorTileService:
+                ApplicationViewModel.Instance.ActiveDocument?.GeoDocument.OperationalLayers.Add(new ArcGISVectorTiledLayer(item));
+                break;
+            // TODO:
+            case PortalItemType.MapDocument:
+            case PortalItemType.SceneDocument:
+            case PortalItemType.MapService:
+            case PortalItemType.SceneService:
+            case PortalItemType.WFS:
+            case PortalItemType.WMS:
+            case PortalItemType.WMTS:
+            case PortalItemType.KML:
+            default:
+                System.Diagnostics.Debug.WriteLine($"Type {item.TypeName} not implemented");
+                break;
         }
     }
 }

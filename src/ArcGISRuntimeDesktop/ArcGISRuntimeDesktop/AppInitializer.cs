@@ -82,6 +82,7 @@ internal class AppInitializer
                 var user = await signinWindow.SignInAsync();
                 ApplicationViewModel.Instance.PortalUser = user;
                 WinUIEx.WindowExtensions.Show(owner);
+                WinUIEx.WindowExtensions.SetForegroundWindow(owner);
                 signinWindow.Close();
             }
             catch (OperationCanceledException)

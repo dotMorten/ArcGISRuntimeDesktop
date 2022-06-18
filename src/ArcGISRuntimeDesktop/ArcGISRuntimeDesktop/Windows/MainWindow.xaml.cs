@@ -16,5 +16,13 @@ public sealed partial class MainWindow : WinUIEx.WindowEx
             AppWindow.TitleBar.ForegroundColor = Colors.White;
             AppWindow.TitleBar.ButtonBackgroundColor = AppWindow.TitleBar.BackgroundColor;
         }
+        try
+        {
+            TaskBarIcon = WinUIEx.Icon.FromFile(Path.Combine(new FileInfo(System.Environment.ProcessPath!).Directory!.FullName,"Assets/ArcGIS.ico"));
+        }
+        catch
+        {
+        }
+        WinUIEx.WindowExtensions.SetForegroundWindow(this);
     }
 }

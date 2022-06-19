@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Windows.Foundation;
 using Windows.System;
+using ArcGISRuntimeDesktop.Helpers;
 
 namespace ArcGISRuntimeDesktop.Controls;
 public sealed partial class AddDataView : UserControl
@@ -19,9 +20,12 @@ public sealed partial class AddDataView : UserControl
         if (e.Key == VirtualKey.Enter)
         {
             var parameters = new PortalQueryParameters(AgoSearchTextBox.Text);
-            var items = await user.Portal.FindItemsAsync(parameters);
-            AgoSearchResults.ItemsSource = new PortalQuerySource(user.Portal, items);
-            
+            try
+            {
+                var items = await user.Portal.FindItemsAsync(parameters);
+                AgoSearchResults.ItemsSource = new PortalQuerySource(user.Portal, items);
+            }
+            catch { }
         }
     }
     private class PortalQuerySource : ObservableCollection<PortalItem>, ISupportIncrementalLoading
@@ -74,44 +78,31 @@ public sealed partial class AddDataView : UserControl
         }
     }
 
+    private async void MyPortalItemsView_Loaded(object sender, RoutedEventArgs e)
+    {
+
+        var user = ApplicationViewModel.Instance.PortalUser;
+        if (user is null) return;
+        try
+        {
+            var items = await user.GetContentAsync();
+            MyPortalItemsView.ItemsSource = items.Items;
+        }
+        catch { }
+    }
+
     private void AddAGODataClick(object sender, RoutedEventArgs e)
     {
-        var item = (sender as Button).CommandParameter as PortalItem;
+        var item = ((Button)sender).CommandParameter as PortalItem;
         if (item is null) return;
-        //ApplicationViewModel.Instance.NewMapDocument
-        switch(item.Type)
+        if (item.TryCreateDocument(out var doc))
         {
-            case PortalItemType.WebMap:
-                var doc = new MapDocument(item.Title, new Map(item));
-                ApplicationViewModel.Instance.AddDocument(doc);
-                ApplicationViewModel.Instance.ActiveDocument = doc;
-                break;
-            case PortalItemType.WebScene:
-                var sdoc = new SceneDocument(item.Title, new Scene(item));
-                ApplicationViewModel.Instance.AddDocument(sdoc);
-                ApplicationViewModel.Instance.ActiveDocument = sdoc;
-                break;
-            case PortalItemType.FeatureService:
-                ApplicationViewModel.Instance.ActiveDocument?.GeoDocument.OperationalLayers.Add(new FeatureLayer(item));
-                break;
-            case PortalItemType.FeatureCollection:
-                ApplicationViewModel.Instance.ActiveDocument?.GeoDocument.OperationalLayers.Add(new FeatureCollectionLayer(new FeatureCollection(item)));
-                break;
-            case PortalItemType.VectorTileService:
-                ApplicationViewModel.Instance.ActiveDocument?.GeoDocument.OperationalLayers.Add(new ArcGISVectorTiledLayer(item));
-                break;
-            // TODO:
-            case PortalItemType.MapDocument:
-            case PortalItemType.SceneDocument:
-            case PortalItemType.MapService:
-            case PortalItemType.SceneService:
-            case PortalItemType.WFS:
-            case PortalItemType.WMS:
-            case PortalItemType.WMTS:
-            case PortalItemType.KML:
-            default:
-                System.Diagnostics.Debug.WriteLine($"Type {item.TypeName} not implemented");
-                break;
+            ApplicationViewModel.Instance.AddDocument(doc);
+            ApplicationViewModel.Instance.ActiveDocument = doc;
+        }
+        else if (ApplicationViewModel.Instance.ActiveDocument != null && item.TryCreateLayer(out var layer))
+        {
+            ApplicationViewModel.Instance.ActiveDocument.AddLayer(layer);
         }
     }
 }

@@ -29,6 +29,28 @@ public abstract class Document : BaseViewModel
         }
         return false;
     }
+    public bool CanAdd(Layer layer)
+    {
+        if (this is MapDocument && layer is not ArcGISSceneLayer && layer is not IntegratedMeshLayer && layer is not PointCloudLayer)
+            return true;
+        return true;
+    }
+
+    internal async void AddLayer(Layer layer)
+    {
+        try
+        {
+            await layer.LoadAsync();
+            GeoDocument.OperationalLayers.Add(layer);
+            if (layer.FullExtent != null)
+                ZoomTo(new Viewpoint(layer.FullExtent));
+        }
+        catch (System.Exception ex)
+        {
+            //TODO
+            System.Diagnostics.Debug.WriteLine("Failed to load layer: " + ex.Message);
+        }
+    }
 
     public void ZoomTo(Viewpoint viewpoint)
     {

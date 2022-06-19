@@ -11,22 +11,13 @@
     <Grid MinHeight="500" MaxWidth="800">
 
         <TabView IsAddTabButtonVisible="False">
-            <TabViewItem Header="Browse" IsClosable="False">
-                
-            </TabViewItem>
-            <TabViewItem Header="ArcGIS Server" IsClosable="False">
-                
-            </TabViewItem>
-            <TabViewItem Header="My Portal" IsClosable="False">
-
-            </TabViewItem>
             <TabViewItem Header="ArcGIS Online" IsClosable="False">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBox Margin="0,5" AcceptsReturn="False" PlaceholderText="Search" Text="Oil" Header="Search ArcGIS Online" KeyDown="AgoSearchTextBox_KeyDown" x:Name="AgoSearchTextBox" />
+                    <TextBox Margin="0,5" AcceptsReturn="False" PlaceholderText="Search" Text="" Header="Search ArcGIS Online" KeyDown="AgoSearchTextBox_KeyDown" x:Name="AgoSearchTextBox" />
                     <ListView x:Name="AgoSearchResults" Grid.Row="1">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="esriPortal:PortalItem">
@@ -41,10 +32,10 @@
                                             <BitmapImage UriSource="{x:Bind ThumbnailUri}" />
                                         </Image.Source>
                                     </Image>
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="{x:Bind Title}" FontWeight="Bold" Style="{StaticResource BaseTextBlockStyle}" />
-                                    <TextBlock Text="{x:Bind Snippet}" TextWrapping="Wrap" />
-                                </StackPanel>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{x:Bind Title}" FontWeight="Bold" Style="{StaticResource BaseTextBlockStyle}" />
+                                        <TextBlock Text="{x:Bind Snippet}" TextWrapping="Wrap" />
+                                    </StackPanel>
                                     <Button Grid.Column="2" Content="+" Click="AddAGODataClick" CommandParameter="{Binding}"/>
 
                                 </Grid>
@@ -52,6 +43,40 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </Grid>
+
+            </TabViewItem>
+            <TabViewItem Header="My Portal" IsClosable="False">
+                <ListView x:Name="MyPortalItemsView" Grid.Row="1" Loaded="MyPortalItemsView_Loaded">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="esriPortal:PortalItem">
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Stretch="UniformToFill" Margin="0,0,5,0">
+                                    <Image.Source>
+                                        <BitmapImage UriSource="{x:Bind ThumbnailUri}" />
+                                    </Image.Source>
+                                </Image>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{x:Bind Title}" FontWeight="Bold" Style="{StaticResource BaseTextBlockStyle}" />
+                                    <TextBlock Text="{x:Bind Snippet}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <TextBlock Text="{Binding TypeName}" Grid.Column="2" VerticalAlignment="Center" Margin="5,0" />
+                                <Button Grid.Column="3" Content="+" Click="AddAGODataClick" CommandParameter="{Binding}"/>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </TabViewItem>
+            <TabViewItem Header="Browse" IsClosable="False">
+                
+            </TabViewItem>
+            <TabViewItem Header="ArcGIS Server" IsClosable="False">
                 
             </TabViewItem>
         </TabView>

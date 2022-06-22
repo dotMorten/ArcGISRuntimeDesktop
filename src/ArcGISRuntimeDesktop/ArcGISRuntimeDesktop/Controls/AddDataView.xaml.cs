@@ -19,7 +19,11 @@ public sealed partial class AddDataView : UserControl
         if (user is null) return;
         if (e.Key == VirtualKey.Enter)
         {
-            var parameters = new PortalQueryParameters(AgoSearchTextBox.Text);
+            var parameters = PortalQueryParameters.CreateForItemsOfTypes(new PortalItemType[]
+            { PortalItemType.SceneService, PortalItemType.MapService, PortalItemType.FeatureCollection, PortalItemType.FeatureService,
+             PortalItemType.BuildingSceneLayer, PortalItemType.ImageService, PortalItemType.KML, PortalItemType.Layer, PortalItemType.MobileBasemapPackage, PortalItemType.MobileMapPackage, PortalItemType.MobileScenePackage,
+             PortalItemType.OGCFeatureServer, PortalItemType.ScenePackage, PortalItemType.ShapeFile, PortalItemType.SQLiteGeodatabase, PortalItemType.VectorTilePackage, PortalItemType.VectorTileService, PortalItemType.WebMap, PortalItemType.WebScene,
+             PortalItemType.WFS, PortalItemType.WMS, PortalItemType.WMTS }, search:AgoSearchTextBox.Text);
             try
             {
                 var items = await user.Portal.FindItemsAsync(parameters);

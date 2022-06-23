@@ -62,7 +62,7 @@ namespace ArcGISRuntimeDesktop.Controls
                 signinWindow.Activate();
                 WinUIEx.WindowExtensions.Hide(mainWindow);
                 var user = await signinWindow.SignInAsync();
-                ApplicationViewModel.Instance.PortalUser = user;
+                await ApplicationViewModel.Instance.SetUserAsync(user);
                 WinUIEx.WindowExtensions.Show(mainWindow);
                 signinWindow.Close();
             }

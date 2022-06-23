@@ -1,16 +1,19 @@
-﻿using Esri.ArcGISRuntime.Geometry;
+﻿using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
+using System.Text;
 using Windows.Storage;
 
 namespace ArcGISRuntimeDesktop.ViewModels;
 
-public abstract class Document : BaseViewModel
+public abstract partial class Document : BaseViewModel
 {
-    public Document(string name)
+    public Document(string name, GeoModel model)
     {
+        GeoDocument = model;
         Name = name.Trim();
     }
 
-    public abstract GeoModel GeoDocument { get; }
+    public GeoModel GeoDocument { get; }
 
     public string Name { get; set; }
 
@@ -29,6 +32,7 @@ public abstract class Document : BaseViewModel
         }
         return false;
     }
+
     public bool CanAdd(Layer layer)
     {
         if (this is MapDocument && layer is not ArcGISSceneLayer && layer is not IntegratedMeshLayer && layer is not PointCloudLayer)

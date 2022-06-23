@@ -6,22 +6,24 @@ public class SceneDocument : Document
 
     private static Scene CreateDefaultScene()
     {
+
         var scene = new Scene(BasemapStyle.ArcGISImageryStandard);
+        System.Diagnostics.Debug.WriteLine(string.Join("\n", ApplicationViewModel.Instance.Basemaps!.Select(f => f.Item?.Name)));
+        if (ApplicationViewModel.Instance.Basemaps?.FirstOrDefault(f=>f.Item?.Name?.EndsWith("_Imagery") == true) is Basemap bm)
+        {
+            scene = new Scene(bm);
+        }
         scene.BaseSurface!.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri(_elevationSourceUrl)));
         return scene;
     }
-    public SceneDocument() : this("") { }
     
     public SceneDocument(string name) : this(name, CreateDefaultScene()) { }
 
-    public SceneDocument(string name, Scene scene) : base(name)
+    public SceneDocument(string name, Scene scene) : base(name, scene)
     {
-        Scene = scene;
     }
 
-    public Scene Scene { get; }
-
-    public override GeoModel GeoDocument => Scene;
+    public Scene Scene => (Scene)GeoDocument;
 
     public override bool Is3D => true;
 

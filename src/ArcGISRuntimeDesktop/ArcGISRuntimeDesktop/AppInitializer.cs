@@ -35,7 +35,7 @@ internal class AppInitializer
         AuthenticationManager.Current.RegisterServer(portalServerInfo);
 
         Progress += 20;
-        await Task.Delay(200);
+        //await Task.Delay(200);
 
 
         if (!string.IsNullOrEmpty(ApplicationViewModel.Instance.AppSettings.PortalUser)) // We have signed in before
@@ -45,7 +45,8 @@ internal class AppInitializer
             {
                 // Do this without oauth handler - we want to fail if credential persistance was empty / or stored credentials no longer working
                 ArcGISPortal arcgisPortal = await ArcGISPortal.CreateAsync(ApplicationViewModel.Instance.AppSettings.PortalUrl, true);
-                ApplicationViewModel.Instance.PortalUser = arcgisPortal.User!;
+                StatusText = "Loading user...";
+                await ApplicationViewModel.Instance.SetUserAsync(arcgisPortal.User!);
             }
             catch (Exception)
             {
@@ -70,7 +71,7 @@ internal class AppInitializer
         }
 
         Progress += 20;
-        await Task.Delay(200);
+        //await Task.Delay(200);
 
         if (ApplicationViewModel.Instance.PortalUser is null)
         {
@@ -80,7 +81,8 @@ internal class AppInitializer
             try
             {
                 var user = await signinWindow.SignInAsync();
-                ApplicationViewModel.Instance.PortalUser = user;
+                StatusText = "Loading user...";
+                await ApplicationViewModel.Instance.SetUserAsync(user);
                 WinUIEx.WindowExtensions.Show(owner);
                 WinUIEx.WindowExtensions.SetForegroundWindow(owner);
                 signinWindow.Close();
@@ -105,7 +107,7 @@ internal class AppInitializer
         }
         StatusText = "Finishing up...";
         Progress = 80;
-        await Task.Delay(200);
+        //await Task.Delay(200);
     }
 
     public event EventHandler<int>? ProgressChanged;

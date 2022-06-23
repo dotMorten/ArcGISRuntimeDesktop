@@ -24,6 +24,20 @@ public class ApplicationViewModel : BaseViewModel
 
     public ObservableCollection<Document> Documents { get; } = new ObservableCollection<Document>();
 
+    internal async void LoadDocuments()
+    {
+            // Create default set of documents
+            var map = new Map(new Basemap(Basemaps!.First().Item!));
+            var dataset = new Esri.ArcGISRuntime.Ogc.KmlDataset(new Uri("https://www.arcgis.com/sharing/rest/content/items/600748d4464442288f6db8a4ba27dc95/data"));
+            KmlLayer fileLayer = new KmlLayer(dataset);
+            map.OperationalLayers.Add(fileLayer);
+            AddDocument(new MapDocument("Airplanes", map));
+            AddDocument(new SceneDocument(string.Empty));
+            await AddDocument("92263bc0cc69466386bcb9846e70d080");
+            await AddDocument("1dcf522a5e23476bbee87ff89849f4c0");
+            await AddDocument("62d8c4ad9e104425bff60c0cdd8efaf1");
+    }
+
     internal void AddDocument(Document document)
     {
         if (string.IsNullOrEmpty(document.Name))
@@ -60,13 +74,13 @@ public class ApplicationViewModel : BaseViewModel
 
     public void NewMapDocument()
     {
-        var doc = new MapDocument();
+        var doc = new MapDocument("");
         AddDocument(doc);
         ActiveDocument = doc;
     }
     public void NewSceneDocument()
     {
-        var doc = new SceneDocument();
+        var doc = new SceneDocument("");
         AddDocument(doc);
         ActiveDocument = doc;
     }
@@ -92,21 +106,32 @@ public class ApplicationViewModel : BaseViewModel
     public PortalUser? PortalUser
     {
         get { return _PortalUser; }
-        set
+        private set
         {
             _PortalUser = value; OnPropertyChanged();
             AppSettings.PortalUser = value?.FullName;
-            PortalUserThumbnail = null;
-            OnPropertyChanged(nameof(PortalUserThumbnail));
-            if (value != null)
-            {
-                RefreshUserThumbnail(value);
-                RefreshBasemaps(value.Portal);
-            }
+            
+           
         }
     }
 
-    private async void RefreshBasemaps(ArcGISPortal value)
+    public async Task SetUserAsync(PortalUser? value)
+    {
+        PortalUserThumbnail = null;
+        OnPropertyChanged(nameof(PortalUserThumbnail));
+        PortalUser = value;
+        if (value != null)
+        {
+            try
+            {
+                await RefreshUserThumbnail(value);
+                await RefreshBasemaps(value.Portal);
+            }
+            catch { }
+        }
+    }
+
+    private async Task RefreshBasemaps(ArcGISPortal value)
     {
         try { 
         Basemaps = await value.GetDeveloperBasemapsAsync();
@@ -117,7 +142,7 @@ public class ApplicationViewModel : BaseViewModel
         }
     }
 
-    private async void RefreshUserThumbnail(PortalUser value)
+    private async Task RefreshUserThumbnail(PortalUser value)
     {
         try
         {

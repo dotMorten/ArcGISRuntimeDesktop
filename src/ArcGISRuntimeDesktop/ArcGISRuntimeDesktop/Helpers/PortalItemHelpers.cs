@@ -24,7 +24,12 @@ namespace ArcGISRuntimeDesktop.Helpers
                     layer = new ArcGISVectorTiledLayer(item);
                     return true;
                 case PortalItemType.SceneService:
-                    layer = new ArcGISSceneLayer(item);
+                    {
+                        if(item.TypeKeywords.Contains("PointCloud"))
+                            layer = new PointCloudLayer(item);
+                        else
+                            layer = new ArcGISSceneLayer(item);
+                    }
                     return true;
                 case PortalItemType.WMS:
                     layer = new WmsLayer(item);

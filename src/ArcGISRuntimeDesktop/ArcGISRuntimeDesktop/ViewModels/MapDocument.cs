@@ -7,22 +7,23 @@ public class MapDocument : Document
     private static Map CreateDefaultMap()
     {
         var map = new Map(BasemapStyle.ArcGISStreets);
+        if (ApplicationViewModel.Instance.Basemaps?.FirstOrDefault(f => f.Item?.Name?.EndsWith("_Streets") == true) is Basemap bm)
+        {
+            map = new Map(bm);
+        }
         return map;
     }
-    public MapDocument() : this(string.Empty) { }
+    public MapDocument(Map model) : this(model.Item?.Name ?? string.Empty,  model) { }
 
     public MapDocument(string name) : this(name, CreateDefaultMap())
     {
     }
 
-    public MapDocument(string name, Map map) : base(name)
+    public MapDocument(string name, Map map) : base(name, map)
     {
-        Map = map;
     }
 
-    public Map Map { get; }
-
-    public override GeoModel GeoDocument => Map;
+    public Map Map => (Map)GeoDocument;
 
     public override bool Is3D => false;
 

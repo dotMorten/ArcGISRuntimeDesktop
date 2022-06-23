@@ -13,13 +13,7 @@ public sealed partial class RootView : Page
     public RootView()
     {
         this.InitializeComponent();
-        var map = new Map(BasemapStyle.ArcGISLightGrayBase);
-        KmlDataset dataset = new KmlDataset(new Uri("https://www.arcgis.com/sharing/rest/content/items/600748d4464442288f6db8a4ba27dc95/data"));
-        KmlLayer fileLayer = new KmlLayer(dataset);
-        map.OperationalLayers.Add(fileLayer);
-        ViewModel.AddDocument(new MapDocument("Airplanes", map));
-        ViewModel.AddDocument(new SceneDocument());
-        _ = ViewModel.AddDocument("92263bc0cc69466386bcb9846e70d080");
+        ViewModel.LoadDocuments();
         ViewModel.AppSettings.PropertyChanged += AppSettings_PropertyChanged;
         if (!ViewModel.AppSettings.IsSidePanePinned)
         {

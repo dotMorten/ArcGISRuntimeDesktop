@@ -197,8 +197,8 @@ public abstract partial class Document : BaseViewModel
             {
                 d.layersAdded.Add(addedLayer);
                 var parameters = addedLayer.Split('\t');
-                itemId = parameters.Where(l => l.StartsWith("itemId:")).FirstOrDefault()?.Substring(7);
-                string? path = parameters.Where(l => l.StartsWith("path:")).FirstOrDefault()?.Substring(5);
+                itemId = parameters.Where(l => l.StartsWith("itemId=")).FirstOrDefault()?.Substring(7);
+                string? path = parameters.Where(l => l.StartsWith("path=")).FirstOrDefault()?.Substring(5);
                 PortalItem? item = null;
                 if(!string.IsNullOrEmpty(itemId))
                 {

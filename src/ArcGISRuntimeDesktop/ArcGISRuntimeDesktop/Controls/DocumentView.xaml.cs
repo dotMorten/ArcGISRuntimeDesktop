@@ -33,10 +33,22 @@ public sealed partial class DocumentView : UserControl
         }
         else
             ContentArea.Content = null;
-        if(e.OldValue is Document old)
+        if (e.OldValue is Document old)
+        {
+            old.GetCurrentViewpoint = null;
             old.ViewpointRequested -= Document_ViewpointRequested;
+        }
         if (document != null)
+        {
             document.ViewpointRequested += Document_ViewpointRequested;
+            document.GetCurrentViewpoint = () =>
+            {
+                var vp = activeView?.GetCurrentViewpoint(ViewpointType.CenterAndScale);
+                if (activeView is SceneView sv && vp.Camera is null)
+                    vp = new Viewpoint((MapPoint)vp.TargetGeometry, vp.TargetScale, vp.Rotation, sv.Camera);
+                return vp;
+            };
+        }
     }
 
     private void Document_ViewpointRequested(object? sender, Viewpoint e)
@@ -112,5 +124,46 @@ public sealed partial class DocumentView : UserControl
             if (Document is MapDocument mapdoc)
                 mapdoc.ActiveLocationDisplay = mapView.LocationDisplay;
         }
+    }
+
+    private async void GeoView_RightTapped(object sender, RightTappedRoutedEventArgs e)
+    {
+        var geoview = (GeoView)sender;
+        var pos = e.GetPosition(geoview);
+        flyout.Items.Clear();
+        //MenuFlyout f = new MenuFlyout();
+        //f.XamlRoot = geoview.XamlRoot;
+        //geoview.ContextFlyout = f;
+        flyout.Items.Add(new MenuFlyoutItem() { Text =  "Identify" /*LocalizedStrings.GetString("GeoView_ContextMenu_Identify")*/ });
+        //flyout.Items.Add(new MenuFlyoutItem() { Text = "Select", IsEnabled = false });
+        //flyout.Placement = Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.Auto;
+
+        flyout.ShowAt(geoview, pos);
+        ((MenuFlyoutItem)flyout.Items[0]).Click += async (s, e) =>
+        {
+            try
+            {
+                var result = await geoview.IdentifyLayersAsync(pos, 2, false, 1);
+                var elm = result.FirstOrDefault()?.GeoElements?.FirstOrDefault();
+                if (elm != null)
+                {
+                    if (elm is Esri.ArcGISRuntime.ILoadable iload)
+                        await iload.LoadAsync();
+                    var mp = elm.Geometry as MapPoint;
+                    if (mp is null)
+                        mp = (geoview as MapView)?.ScreenToLocation(pos) ?? (geoview as SceneView)?.ScreenToBaseSurface(pos);
+                    if (mp is not null)
+                        geoview.ShowCalloutAt(mp, new GeoElementView() { Element = elm });
+                    //geoview.ShowCalloutForGeoElement(elm, pos, new Esri.ArcGISRuntime.UI.CalloutDefinition(elm));
+                }
+                else
+                {
+                    MapPoint? loc = (geoview as MapView)?.ScreenToLocation(pos) ?? await ((geoview as SceneView)?.ScreenToLocationAsync(pos) ?? Task.FromResult<MapPoint?>(null));
+                    if (loc != null)
+                        geoview.ShowCalloutAt(loc, new Esri.ArcGISRuntime.UI.CalloutDefinition(CoordinateFormatter.ToLatitudeLongitude(loc, LatitudeLongitudeFormat.DegreesDecimalMinutes, 3)));
+                }
+            }
+            catch { }
+        };
     }
 }

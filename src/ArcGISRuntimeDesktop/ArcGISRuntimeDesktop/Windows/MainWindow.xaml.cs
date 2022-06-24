@@ -24,5 +24,11 @@ public sealed partial class MainWindow : WinUIEx.WindowEx
         {
         }
         WinUIEx.WindowExtensions.SetForegroundWindow(this);
+        this.Closed += MainWindow_Closed;
+    }
+
+    private void MainWindow_Closed(object sender, WindowEventArgs args)
+    {
+        ApplicationViewModel.Instance.OnShutdown();
     }
 }

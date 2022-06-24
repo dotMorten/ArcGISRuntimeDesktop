@@ -1,6 +1,7 @@
 ﻿using Esri.ArcGISRuntime;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
+using Windows.Storage;
 
 namespace ArcGISRuntimeDesktop.ViewModels;
 
@@ -24,8 +25,35 @@ public class ApplicationViewModel : BaseViewModel
 
     public ObservableCollection<Document> Documents { get; } = new ObservableCollection<Document>();
 
+    internal void OnShutdown()
+    {
+        var documents = ApplicationData.Current.LocalSettings.CreateContainer("Documents", ApplicationDataCreateDisposition.Always);
+        documents.Values.Clear();
+        int i = 0;
+        foreach (var doc in Documents)
+        {
+            if (doc.TrySerialize(out string data))
+            {
+                documents.Values.Add((i++).ToString("0000"), data);
+            }
+        }
+    }
+
     internal async void LoadDocuments()
     {
+        var documents = ApplicationData.Current.LocalSettings.CreateContainer("Documents", ApplicationDataCreateDisposition.Always);
+        foreach(var key in documents.Values.Keys.OrderBy(k=>k))
+        {
+            try
+            {
+                var doc = await Document.CreateFromSerialized((string)documents.Values[key]);
+                if (doc != null)
+                    AddDocument(doc);
+            }
+            catch { }
+        }
+        if (Documents.Count == 0)
+        {
             // Create default set of documents
             var map = new Map(new Basemap(Basemaps!.First().Item!));
             var dataset = new Esri.ArcGISRuntime.Ogc.KmlDataset(new Uri("https://www.arcgis.com/sharing/rest/content/items/600748d4464442288f6db8a4ba27dc95/data"));
@@ -36,6 +64,7 @@ public class ApplicationViewModel : BaseViewModel
             await AddDocument("92263bc0cc69466386bcb9846e70d080");
             await AddDocument("1dcf522a5e23476bbee87ff89849f4c0");
             await AddDocument("62d8c4ad9e104425bff60c0cdd8efaf1");
+        }
     }
 
     internal void AddDocument(Document document)

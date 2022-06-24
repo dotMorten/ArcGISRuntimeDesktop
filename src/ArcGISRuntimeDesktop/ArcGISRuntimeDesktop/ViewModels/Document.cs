@@ -10,6 +10,10 @@ public abstract partial class Document : BaseViewModel
     public Document(string name, GeoModel model)
     {
         GeoDocument = model;
+        if (model.LoadStatus == Esri.ArcGISRuntime.LoadStatus.Loaded)
+            SubscribeToModel();
+        else
+            model.Loaded += (s, e) => SubscribeToModel();
         Name = name.Trim();
     }
 
@@ -62,6 +66,7 @@ public abstract partial class Document : BaseViewModel
     }
 
     public event EventHandler<Viewpoint>? ViewpointRequested;
+    public Func<Viewpoint?>? GetCurrentViewpoint;
 
     public async Task<Envelope?> Add(IEnumerable<IStorageItem> items)
     {

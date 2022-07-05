@@ -14,12 +14,18 @@ public sealed partial class RootView : Page
     {
         this.InitializeComponent();
         ViewModel.LoadDocuments();
+        this.Loaded += RootView_Loaded;
         ViewModel.AppSettings.PropertyChanged += AppSettings_PropertyChanged;
         if (!ViewModel.AppSettings.IsSidePanePinned)
         {
             splitViewPane.DisplayMode = SplitViewDisplayMode.CompactOverlay;
             splitViewPane.IsPaneOpen = false;
         }
+    }
+
+    private void RootView_Loaded(object sender, RoutedEventArgs e)
+    {
+        ((FrameworkElement)XamlRoot.Content).RequestedTheme = ViewModel.AppSettings.Theme;
     }
 
     private void AppSettings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -31,6 +37,10 @@ public sealed partial class RootView : Page
                 splitViewPane.DisplayMode = SplitViewDisplayMode.Inline;
             else
                 splitViewPane.DisplayMode = SplitViewDisplayMode.CompactOverlay;
+        }
+        else if (e.PropertyName == nameof(AppSettings.Theme))
+        {
+            ((FrameworkElement)XamlRoot.Content).RequestedTheme = ViewModel.AppSettings.Theme;
         }
     }
 

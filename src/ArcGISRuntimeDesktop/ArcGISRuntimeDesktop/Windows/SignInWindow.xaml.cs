@@ -15,7 +15,7 @@ namespace ArcGISRuntimeDesktop.Windows
             this.Height = 480;
             this.IsResizable = false;
             this.Closed += (s, e) => tcs.TrySetCanceled();
-            this.AppWindow.Title = "ArcGIS Desktop";
+            this.AppWindow.Title = "ArcGIS Runtime Desktop";
             if (AppWindowTitleBar.IsCustomizationSupported())
             {
                 this.AppWindow.TitleBar.InactiveBackgroundColor =
@@ -26,8 +26,11 @@ namespace ArcGISRuntimeDesktop.Windows
                 this.AppWindow.TitleBar.ForegroundColor =
                 this.AppWindow.TitleBar.ButtonForegroundColor =
                     Microsoft.UI.Colors.White;
+                this.AppWindow.TitleBar.IconShowOptions = IconShowOptions.HideIconAndSystemMenu;
             }
             this.Closed += SignInWindow_Closed;
+            WinUIEx.WindowExtensions.SetIcon(this, new Microsoft.UI.IconId() { Value = 0 });
+            WinUIEx.WindowExtensions.SetIsMaximizable(this, false);
             WinUIEx.WindowExtensions.CenterOnScreen(this);
         }
 

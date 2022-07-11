@@ -10,7 +10,7 @@
     mc:Ignorable="d" Width="300">
 
     <ScrollViewer>
-        <StackPanel Margin="10">            
+        <StackPanel Margin="10">
             <TreeView ItemsSource="{x:Bind Document.GeoDocument.OperationalLayers, Mode=OneWay}" Margin="-25,10,0,0">
                 <TreeView.ItemTemplateSelector>
                     <local:LayerTemplateSelector>
@@ -18,7 +18,7 @@
                             <DataTemplate x:DataType="mapping:ILayerContent">
                                 <TreeViewItem ItemsSource="{x:Bind SublayerContents}" Height="32">
                                     <TreeViewItem.ContextFlyout>
-                                        <MenuFlyout x:Name="contentFlyout" Opening="contentFlyout_Opening" />
+                                        <MenuFlyout Opening="contentFlyout_Opening" />
                                     </TreeViewItem.ContextFlyout>
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox IsChecked="{x:Bind IsVisible, Mode=TwoWay}" MinWidth="0" Visibility="{x:Bind CanChangeVisibility}" />
@@ -30,6 +30,9 @@
                         <local:LayerTemplateSelector.KmlLayerTemplate>
                             <DataTemplate x:DataType="mapping:KmlLayer">
                                 <TreeViewItem ItemsSource="{x:Bind Dataset.RootNodes, Mode=OneWay}" Height="32">
+                                    <TreeViewItem.ContextFlyout>
+                                        <MenuFlyout Opening="contentFlyout_Opening" />
+                                    </TreeViewItem.ContextFlyout>
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox IsChecked="{x:Bind IsVisible, Mode=TwoWay}" MinWidth="0" Visibility="{x:Bind CanChangeVisibility}" />
                                         <TextBlock Text="{x:Bind Name, Mode=OneWay}" Margin="5,0,0,0"  Style="{StaticResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
@@ -40,6 +43,9 @@
                         <local:LayerTemplateSelector.KmlContainerTemplate>
                             <DataTemplate x:DataType="ogc:KmlContainer">
                                 <TreeViewItem ItemsSource="{x:Bind ChildNodes, Mode=OneWay}" Height="32">
+                                    <TreeViewItem.ContextFlyout>
+                                        <MenuFlyout Opening="contentFlyout_Opening" />
+                                    </TreeViewItem.ContextFlyout>
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox IsChecked="{x:Bind IsVisible, Mode=TwoWay}" MinWidth="0" />
                                         <TextBlock Text="{x:Bind Name, Mode=OneWay}" Margin="5,0,0,0"  Style="{StaticResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
@@ -50,6 +56,9 @@
                         <local:LayerTemplateSelector.KmlNetworkLinkTemplate>
                             <DataTemplate x:DataType="ogc:KmlNetworkLink">
                                 <TreeViewItem ItemsSource="{x:Bind ChildNodes, Mode=OneWay}" Height="32">
+                                    <TreeViewItem.ContextFlyout>
+                                        <MenuFlyout Opening="contentFlyout_Opening" />
+                                    </TreeViewItem.ContextFlyout>
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox IsChecked="{x:Bind IsVisible, Mode=TwoWay}" MinWidth="0" />
                                         <TextBlock Text="{x:Bind Name, Mode=OneWay}" Margin="5,0,0,0"  Style="{StaticResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
@@ -60,6 +69,9 @@
                         <local:LayerTemplateSelector.KmlNodeTemplate>
                             <DataTemplate x:DataType="ogc:KmlNetworkLink">
                                 <TreeViewItem  Height="32">
+                                    <TreeViewItem.ContextFlyout>
+                                        <MenuFlyout Opening="contentFlyout_Opening" />
+                                    </TreeViewItem.ContextFlyout>
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox IsChecked="{x:Bind IsVisible, Mode=TwoWay}" MinWidth="0" />
                                         <TextBlock Text="{x:Bind Name, Mode=OneWay}" Margin="5,0,0,0"  Style="{StaticResource BodyTextBlockStyle}"/>

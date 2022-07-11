@@ -10,8 +10,8 @@
     Title="ArcGIS Runtime Desktop"
     mc:Ignorable="d">
     <ex:WindowEx.Backdrop>
-        <ex:MicaSystemBackdrop DarkLuminosityOpacity=".75" DarkTintOpacity="0" DarkTintColor="Black" DarkFallbackColor="#eee" 
-                                  LightLuminosityOpacity=".75" LightTintOpacity="0" LightTintColor="White" LightFallbackColor="#eee" />
+        <ex:MicaSystemBackdrop DarkLuminosityOpacity=".75" DarkTintOpacity="0" DarkTintColor="Black" DarkFallbackColor="#333" 
+                               LightLuminosityOpacity=".75" LightTintOpacity="0" LightTintColor="White" LightFallbackColor="#eee" />
     </ex:WindowEx.Backdrop>
 <views:RootView  />
 </ex:WindowEx>

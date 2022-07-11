@@ -12,9 +12,9 @@
     xmlns:tk="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d"
     RequestedTheme="{x:Bind ViewModel.AppSettings.Theme,Mode=OneWay}">
-    <Page.Background>
+    <!--<Page.Background>
         <SolidColorBrush Color="{ThemeResource ControlFillColorDefault}"/>
-    </Page.Background>
+    </Page.Background>-->
 
     <Page.Resources>
         <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent"/>
@@ -38,7 +38,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <SplitView x:Name="splitViewPane" PaneBackground="Transparent" CompactPaneLength="40" Grid.RowSpan="2" Grid.ColumnSpan="2" DisplayMode="Inline" PanePlacement="Left" IsPaneOpen="True"  >
+            <SplitView x:Name="splitViewPane" PaneBackground="{ThemeResource ControlFillColorDefault}" CompactPaneLength="40" Grid.RowSpan="2" Grid.ColumnSpan="2" DisplayMode="Inline" PanePlacement="Left" IsPaneOpen="True"  >
                 <SplitView.Pane>
                     <NavigationView PointerPressed="SidePane_PointerPressed" x:Name="SidePane" PaneDisplayMode="LeftCompact" IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False" IsSettingsVisible="False">
                         <NavigationView.MenuItems>

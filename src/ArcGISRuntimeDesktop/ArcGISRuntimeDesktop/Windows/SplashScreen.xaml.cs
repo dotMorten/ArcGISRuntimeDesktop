@@ -24,7 +24,11 @@ public sealed partial class SplashScreen : WinUIEx.SplashScreen
         {
             await initializer.Initialize(this);
         }
-        catch(System.Exception ex)
+        catch (OperationCanceledException)
+        {
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
+        catch (System.Exception ex)
         {
             var dialog = WinUIEx.WindowExtensions.CreateMessageDialog(this, "Error initializing", ex.Message);
             await dialog.ShowAsync();

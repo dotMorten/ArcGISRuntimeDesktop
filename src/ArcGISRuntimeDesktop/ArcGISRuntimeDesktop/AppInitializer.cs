@@ -89,8 +89,7 @@ internal class AppInitializer
             }
             catch (OperationCanceledException)
             {
-                App.Current.Exit();
-                return;
+                throw;
             }
         }
 

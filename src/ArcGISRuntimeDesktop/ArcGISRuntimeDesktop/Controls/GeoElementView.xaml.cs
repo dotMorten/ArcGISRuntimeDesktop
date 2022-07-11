@@ -97,7 +97,7 @@ namespace ArcGISRuntimeDesktop.Controls
         {
             Close?.Invoke(this, EventArgs.Empty);
         }
-        public event EventHandler Close;
+        public event EventHandler? Close;
     }
 
     public class GeoElementViewItemData

@@ -10,6 +10,14 @@
                 <CalciteControlsResources xmlns="using:Esri.Calcite.WinUI" />
                 <ResourceDictionary Source="ms-appx:///ApplicationConfiguration.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <SolidColorBrush x:Key="FallbackBackgroundBrush" Color="#202020" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Light" >
+                    <SolidColorBrush x:Key="FallbackBackgroundBrush" Color="#eee" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

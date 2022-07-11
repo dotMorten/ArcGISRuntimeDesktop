@@ -19,6 +19,7 @@ public sealed partial class RootView : Page
         {
             splitViewPane.DisplayMode = SplitViewDisplayMode.CompactOverlay;
             splitViewPane.IsPaneOpen = false;
+            backgroundWhenUnpinned.Visibility = Visibility.Visible;
         }
     }
 
@@ -28,9 +29,15 @@ public sealed partial class RootView : Page
         {
             //TODO: change to converter
             if (ViewModel.AppSettings.IsSidePanePinned)
+            {
                 splitViewPane.DisplayMode = SplitViewDisplayMode.Inline;
+                backgroundWhenUnpinned.Visibility = Visibility.Collapsed;
+            }
             else
+            {
                 splitViewPane.DisplayMode = SplitViewDisplayMode.CompactOverlay;
+                backgroundWhenUnpinned.Visibility = Visibility.Visible;
+            }
         }
     }
 

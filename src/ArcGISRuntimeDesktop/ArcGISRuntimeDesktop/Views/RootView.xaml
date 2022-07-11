@@ -12,15 +12,12 @@
     xmlns:tk="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d"
     RequestedTheme="{x:Bind ViewModel.AppSettings.Theme,Mode=OneWay}">
-    <!--<Page.Background>
-        <SolidColorBrush Color="{ThemeResource ControlFillColorDefault}"/>
-    </Page.Background>-->
 
     <Page.Resources>
         <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent"/>
     </Page.Resources>
-    <Grid>
 
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
             <RowDefinition Height="*" />
@@ -38,7 +35,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <SplitView x:Name="splitViewPane" PaneBackground="{ThemeResource ControlFillColorDefault}" CompactPaneLength="40" Grid.RowSpan="2" Grid.ColumnSpan="2" DisplayMode="Inline" PanePlacement="Left" IsPaneOpen="True"  >
+            <SplitView x:Name="splitViewPane" PaneBackground="Transparent" CompactPaneLength="49" Grid.RowSpan="2" Grid.ColumnSpan="2" DisplayMode="Inline" PanePlacement="Left" IsPaneOpen="True"  >
                 <SplitView.Pane>
                     <NavigationView PointerPressed="SidePane_PointerPressed" x:Name="SidePane" PaneDisplayMode="LeftCompact" IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False" IsSettingsVisible="False">
                         <NavigationView.MenuItems>
@@ -85,6 +82,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
+                            <Grid Background="{ThemeResource FallbackBackgroundBrush}" Margin="0,0,0,0" Grid.RowSpan="2" Visibility="Collapsed" x:Name="backgroundWhenUnpinned" />
                             <Grid Background="{StaticResource TintNormal}" Padding="10,0" Height="32" Margin="0,5,0,0" CornerRadius="5,5,0,0">
                                 <TextBlock VerticalAlignment="Center" Style="{StaticResource BaseTextBlockStyle}"
                                     Text="{Binding SelectedItem.Content, ElementName=SidePane, Mode=OneWay}" Foreground="White" />

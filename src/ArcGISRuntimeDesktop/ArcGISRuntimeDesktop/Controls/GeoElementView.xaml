@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Grid>
     <StackPanel MaxWidth="300" MaxHeight="300">
         <TextBlock x:Name="DisplayField" FontWeight="Bold" />
         
@@ -21,6 +22,9 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
         
-        <WebView2 x:Name="webView" Visibility="Collapsed" />
+        <WebView2 x:Name="webView" Visibility="Collapsed" Width="300" Height="200" />
     </StackPanel>
+        <SymbolIcon Symbol="Cancel" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    PointerPressed="Close_PointerPressed" Margin="-3"/>
+    </Grid>
 </UserControl>

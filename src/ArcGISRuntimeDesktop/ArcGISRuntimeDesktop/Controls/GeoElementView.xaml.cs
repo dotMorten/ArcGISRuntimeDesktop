@@ -35,10 +35,12 @@ namespace ArcGISRuntimeDesktop.Controls
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(GeoElement), typeof(GeoElementView), new PropertyMetadata(null, (s, e) => ((GeoElementView)s).OnGeoElementViewPropertyChanged(e)));
 
-        private void OnGeoElementViewPropertyChanged(DependencyPropertyChangedEventArgs e)
+        private async void OnGeoElementViewPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             ItemsView.ItemsSource = null;
             DisplayField.Text = "";
+            webView.Visibility = Visibility.Collapsed;
+            ItemsView.Visibility = Visibility.Visible;
             if (e.NewValue is GeoElement elm)
             {
                 List<GeoElementViewItemData> data = new List<GeoElementViewItemData>();
@@ -46,7 +48,23 @@ namespace ArcGISRuntimeDesktop.Controls
                 {
                     data.Add(new GeoElementViewItemData(item.Key, item.Value));
                 }
-                if (elm is Feature f && f.FeatureTable is not null)
+                if (elm is Esri.ArcGISRuntime.Ogc.KmlGeoElement kmlelm)
+                {
+                    if(elm.Attributes.ContainsKey("html"))
+                    {
+                        try
+                        {
+                            await webView.EnsureCoreWebView2Async();
+                            webView.NavigateToString((string)elm.Attributes["html"]);
+                            ItemsView.Visibility = Visibility.Collapsed;
+                            webView.Visibility = Visibility.Visible;
+                        }
+                        catch (System.Exception ex)
+                        {
+                        }
+                    }
+                }
+                else if (elm is Feature f && f.FeatureTable is not null)
                 {
                     var displayFieldName = (f.FeatureTable as ArcGISFeatureTable)?.LayerInfo?.DisplayFieldName;
                     foreach (var field in f.FeatureTable.Fields)
@@ -75,6 +93,11 @@ namespace ArcGISRuntimeDesktop.Controls
                 ItemsView.ItemsSource = data;
             }
         }
+        private void Close_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            Close?.Invoke(this, EventArgs.Empty);
+        }
+        public event EventHandler Close;
     }
 
     public class GeoElementViewItemData

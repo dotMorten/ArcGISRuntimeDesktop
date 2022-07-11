@@ -153,14 +153,24 @@ public sealed partial class DocumentView : UserControl
                     if (mp is null)
                         mp = (geoview as MapView)?.ScreenToLocation(pos) ?? (geoview as SceneView)?.ScreenToBaseSurface(pos);
                     if (mp is not null)
-                        geoview.ShowCalloutAt(mp, new GeoElementView() { Element = elm });
-                    //geoview.ShowCalloutForGeoElement(elm, pos, new Esri.ArcGISRuntime.UI.CalloutDefinition(elm));
+                    {
+                        var popup = new GeoElementView() { Element = elm };
+                        popup.Close += (s, e) => geoview.DismissCallout();
+                        geoview.ShowCalloutAt(mp, popup);
+                    }
                 }
                 else
                 {
                     MapPoint? loc = (geoview as MapView)?.ScreenToLocation(pos) ?? await ((geoview as SceneView)?.ScreenToLocationAsync(pos) ?? Task.FromResult<MapPoint?>(null));
                     if (loc != null)
-                        geoview.ShowCalloutAt(loc, new Esri.ArcGISRuntime.UI.CalloutDefinition(CoordinateFormatter.ToLatitudeLongitude(loc, LatitudeLongitudeFormat.DegreesDecimalMinutes, 3)));
+                    {
+                        string coordinate = CoordinateFormatter.ToLatitudeLongitude(loc, LatitudeLongitudeFormat.DegreesDecimalMinutes, 3);
+                        if(loc.HasZ)
+                        {
+                            coordinate += " Z=" + loc.Z.ToString("0.###");
+                        }
+                        geoview.ShowCalloutAt(loc, new Esri.ArcGISRuntime.UI.CalloutDefinition(coordinate));
+                    }
                 }
             }
             catch { }

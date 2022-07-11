@@ -15,7 +15,7 @@
             <TextBlock Text="An ArcGIS Online Account is required to license this application"  Foreground="White"
                        FontSize="14" Style="{StaticResource SubheaderTextBlockStyle}" HorizontalAlignment="Center" Margin="10" />
             <Button Content="Sign in" Click="SignIn_Click" HorizontalAlignment="Center" Margin="10" Width="200" />
-            <TextBlock x:Name="status" HorizontalAlignment="Center" Foreground="White" />
+            <TextBlock x:Name="status" HorizontalAlignment="Center" Foreground="White" TextWrapping="Wrap" />
         </StackPanel>
 
     </Grid>

@@ -28,25 +28,28 @@
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Input" Version="7.1.2" />
-    <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="100.14.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.2" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.197" />
     <PackageReference Include="WinUIEx" Version="1.8.0" />
     <Manifest Include="$(ApplicationManifest)" />
-
-     <None Remove="Controls\DocumentSettingsView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Calcite.WinUI\Esri.Calcite.WinUI.csproj" />
   </ItemGroup>
-
-    <ItemGroup>
-      <Page Update="Controls\DocumentSettingsView.xaml">
-        <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-        <SubType>Designer</SubType>
-      </Page>
-    </ItemGroup>
-
+   
+  <!-- Set up Runtime references -->
+  <PropertyGroup>
+    <UseProjectReferences Condition="Exists('$(SolutionDir)Esri.ArcGISRuntime\Esri.ArcGISRuntime.csproj')">true</UseProjectReferences>
+    <RuntimeNugetPackageVersion>100.14.1</RuntimeNugetPackageVersion>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(UseProjectReferences)'=='true'">
+    <ProjectReference Include="$(SolutionDir)Esri.ArcGISRuntime\Esri.ArcGISRuntime.csproj" />
+    <ProjectReference Include="$(SolutionDir)\Esri.ArcGISRuntime.UI\Esri.ArcGISRuntime.WinUI\Esri.ArcGISRuntime.WinUI.csproj" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' AND '$(UseMaui)'=='true' OR '$(UseWinUI)'=='true'" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseProjectReferences)'!='true'">
+    <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(RuntimeNugetPackageVersion)" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' AND '$(UseMaui)'=='true' OR '$(UseWinUI)'=='true'" />
+  </ItemGroup>
+  <Import Project="$(SolutionDir)..\build\LocalRef\Esri.ArcGISRuntime.All.LocalRef.targets" Condition="'$(UseProjectReferences)'=='true'" />
 
 </Project>

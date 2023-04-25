@@ -11,9 +11,9 @@ namespace ArcGISRuntimeDesktop.Services.ArcGISServer
 {
     public class Client
     {   
-        private readonly HttpClient _client = new HttpClient(new ArcGISHttpClientHandler());
+        private readonly HttpClient _client = new HttpClient(new ArcGISHttpMessageHandler());
         private string _url;
-        public Client(string url) : this(url, new HttpClient(new ArcGISHttpClientHandler()))
+        public Client(string url) : this(url, new HttpClient(new ArcGISHttpMessageHandler()))
         {
         }
         private Client(string url, HttpClient client)

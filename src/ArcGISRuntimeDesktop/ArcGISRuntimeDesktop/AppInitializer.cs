@@ -12,8 +12,6 @@ internal class AppInitializer
     {
         StatusText = "Initializing ArcGIS Runtime...";
 
-        Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
-        AuthenticationManager.Current.Persistence = await AppDataCredentialPersistence.CreateAsync();
 
         //Register server info for portal
         var settings = ApplicationViewModel.Instance.AppSettings;
@@ -25,14 +23,14 @@ internal class AppInitializer
             throw new InvalidOperationException("Please configure your client id and redirect url in 'ApplicationConfiguration.xaml' to run this sample");
         }
 
-        var redirectUrl = new Uri(settings.OAuthRedirectUrl);
 
         ServerInfo portalServerInfo = new ServerInfo(settings.PortalUrl)
         {
             TokenAuthenticationType = TokenAuthenticationType.OAuthAuthorizationCode,
-            OAuthClientInfo = new OAuthClientInfo(settings.OAuthClientId, redirectUrl)
+            OAuthClientInfo = new OAuthClientInfo(settings.OAuthClientId, new Uri(settings.OAuthRedirectUrl))
         };
         AuthenticationManager.Current.RegisterServer(portalServerInfo);
+        AuthenticationManager.Current.Persistence = await CredentialPersistence.CreateDefaultAsync();
 
         Progress += 20;
         //await Task.Delay(200);
@@ -44,7 +42,8 @@ internal class AppInitializer
             try
             {
                 // Do this without oauth handler - we want to fail if credential persistance was empty / or stored credentials no longer working
-                ArcGISPortal arcgisPortal = await ArcGISPortal.CreateAsync(ApplicationViewModel.Instance.AppSettings.PortalUrl, true);
+                await Task.Delay(1000);
+                ArcGISPortal arcgisPortal = await ArcGISPortal.CreateAsync(settings.PortalUrl, true);
                 StatusText = "Loading user...";
                 await ApplicationViewModel.Instance.SetUserAsync(arcgisPortal.User!);
             }

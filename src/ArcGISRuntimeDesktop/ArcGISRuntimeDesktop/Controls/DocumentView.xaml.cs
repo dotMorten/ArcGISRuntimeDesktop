@@ -44,6 +44,7 @@ public sealed partial class DocumentView : UserControl
             document.GetCurrentViewpoint = () =>
             {
                 var vp = activeView?.GetCurrentViewpoint(ViewpointType.CenterAndScale);
+                if(vp is null) return null;
                 if (activeView is SceneView sv && vp.Camera is null)
                     vp = new Viewpoint((MapPoint)vp.TargetGeometry, vp.TargetScale, vp.Rotation, sv.Camera);
                 return vp;

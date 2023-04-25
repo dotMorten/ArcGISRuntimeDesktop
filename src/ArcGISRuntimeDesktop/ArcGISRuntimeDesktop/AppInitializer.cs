@@ -1,4 +1,5 @@
-﻿using Esri.ArcGISRuntime.Security;
+﻿using Esri.ArcGISRuntime.Http;
+using Esri.ArcGISRuntime.Security;
 
 namespace ArcGISRuntimeDesktop;
 
@@ -12,7 +13,6 @@ internal class AppInitializer
     {
         StatusText = "Initializing ArcGIS Runtime...";
 
-
         //Register server info for portal
         var settings = ApplicationViewModel.Instance.AppSettings;
         if (settings.OAuthClientId == "SET_CLIENT_ID" || settings.OAuthRedirectUrl == "SET_REDIRECT_URL")
@@ -23,13 +23,21 @@ internal class AppInitializer
             throw new InvalidOperationException("Please configure your client id and redirect url in 'ApplicationConfiguration.xaml' to run this sample");
         }
 
-
-        ServerInfo portalServerInfo = new ServerInfo(settings.PortalUrl)
+        Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize( config => config
+            .ConfigureAuthentication(auth => auth
+                .AddServerInfo(new ServerInfo(settings.PortalUrl)
         {
             TokenAuthenticationType = TokenAuthenticationType.OAuthAuthorizationCode,
             OAuthClientInfo = new OAuthClientInfo(settings.OAuthClientId, new Uri(settings.OAuthRedirectUrl))
-        };
-        AuthenticationManager.Current.RegisterServer(portalServerInfo);
+                })
+                //.UseDefaultChallengeHandler() // Do this later after checking persisted credentials - we don't want to trigger callback during that check
+            )
+            .ConfigureHttp(http => http
+                .UseResponseCacheSize(200 * 1024 * 1024) // Increase cache size to 200mb
+                    .UseDefaultReferer(new Uri("https://github.com/dotMorten/ArcGISRuntimeDesktop"))
+                    .AddUserAgentValue("ArcGISMapsSDKDesktopApp", "1.0")
+            )
+        );
         AuthenticationManager.Current.Persistence = await CredentialPersistence.CreateDefaultAsync();
 
         Progress += 20;

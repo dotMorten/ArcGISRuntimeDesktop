@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ArcGISRuntimeDesktop"
     xmlns:vm="using:ArcGISRuntimeDesktop.ViewModels"
+    xmlns:ctrls="using:ArcGISRuntimeDesktop.Controls"
     xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -38,6 +39,9 @@
         <StackPanel Orientation="Horizontal" x:Name="StatusArea" Grid.Row="1" Grid.Column="1">
             <TextBlock x:Name="PointerPosition" HorizontalAlignment="Center" />
         </StackPanel>
+
+        <ctrls:GeometryEditorToolbar x:Name="editorToolbar" />
+
         <Grid.ContextFlyout>
             <MenuFlyout x:Name="flyout" />
         </Grid.ContextFlyout>

@@ -24,6 +24,7 @@
   </ItemGroup>
     
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Animations" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
@@ -50,6 +51,9 @@
   <ItemGroup Condition="'$(UseProjectReferences)'!='true'">
     <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(RuntimeNugetPackageVersion)" />
     <PackageReference Include="Esri.ArcGISRuntime.Toolkit.WinUI" Version="$(RuntimeNugetPackageVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\HeroImages\" />
   </ItemGroup>
   <Import Project="$(SolutionDir)..\build\LocalRef\Esri.ArcGISRuntime.All.LocalRef.targets" Condition="'$(UseProjectReferences)'=='true'" />
 

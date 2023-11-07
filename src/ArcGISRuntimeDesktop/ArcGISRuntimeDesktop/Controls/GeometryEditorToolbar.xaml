@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="ArcGISRuntimeDesktop.Controls.GeometryEditorToolbar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ArcGISRuntimeDesktop"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20"
+    Visibility="{x:Bind GeometryEditor.IsStarted, Mode=OneWay}"
+    >
+
+    <Grid  Background="{StaticResource Background0}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Border Background="{StaticResource Background2}">
+            <TextBlock Text="Geometry Editor Toolbar" FontSize="10" Margin="10,3" />
+        </Border>
+        <StackPanel Grid.Row="1" Padding="0" Orientation="Horizontal">
+            <Button Background="Transparent" ToolTipService.ToolTip="{local:StringResource Key=Undo}" Command="{x:Bind UndoCommand}">
+                <SymbolIcon Symbol="Undo"  />
+            </Button>
+            <Button Background="Transparent" ToolTipService.ToolTip="{local:StringResource Key=Redo}" Command="{x:Bind RedoCommand}">
+                <SymbolIcon Symbol="Redo"  />
+            </Button>
+            <Button Background="Transparent" ToolTipService.ToolTip="{local:StringResource Key=GeometryEditor_DeleteSelection}" Command="{x:Bind DeleteSelectedCommand}">
+                <SymbolIcon Symbol="Delete"  />
+            </Button>
+            <Button Background="Transparent" ToolTipService.ToolTip="{local:StringResource Key=GeometryEditor_ClearSelection}" Command="{x:Bind ClearSelectionCommand}">
+                <SymbolIcon Symbol="ClearSelection"  />
+            </Button>
+            <Button Background="Transparent" ToolTipService.ToolTip="{local:StringResource Key=GeometryEditor_AddPart}" Command="{x:Bind AddPartCommand}">
+                <SymbolIcon Symbol="Add"  />
+            </Button>
+            <Button Background="Transparent" ToolTipService.ToolTip="{local:StringResource Key=GeometryEditor_CompleteDraw}" Command="{x:Bind FinishCommand}">
+                <SymbolIcon Symbol="Accept"  />
+            </Button>
+            <Button Background="Transparent" ToolTipService.ToolTip="{local:StringResource Key=GeometryEditor_Cancel}" Command="{x:Bind StopCommand}">
+                <SymbolIcon Symbol="Cancel"  />
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

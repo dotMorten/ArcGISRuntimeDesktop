@@ -22,7 +22,6 @@ namespace ArcGISRuntimeDesktop.Windows
             manager.IsMinimizable = false;
             manager.IsResizable = false;
             this.Closed += (s, e) => tcs.TrySetCanceled();
-            this.AppWindow.Title = "Desktop App - Powered by ArcGIS Maps SDK for .NET";
             if (AppWindowTitleBar.IsCustomizationSupported())
             {
                 this.AppWindow.TitleBar.InactiveBackgroundColor =

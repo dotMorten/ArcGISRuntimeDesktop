@@ -11,8 +11,12 @@
     <Grid Background="#130D4E" RequestedTheme="Dark">
 
         <Image Source="ms-appx:///Assets/HeroImages/Hero2.jpg" Stretch="UniformToFill" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <TextBlock Text="ArcGIS Runtime Desktop" HorizontalAlignment="Center" Foreground="White"
-                   VerticalAlignment="Center" Margin="0,250,0,0" Style="{StaticResource TitleTextBlockStyle}" />
+        <StackPanel HorizontalAlignment="Center" Margin="0,350,0,0">
+            <TextBlock Text="{local:StringResource Key=AppName}" HorizontalAlignment="Center" Foreground="White"
+                   VerticalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock Text="{local:StringResource Key=PoweredBy}" HorizontalAlignment="Center" Foreground="White"
+                   VerticalAlignment="Center" Margin="0,5,0,0" Style="{StaticResource BodyStrongTextBlockStyle}" />
+        </StackPanel>
         <StackPanel VerticalAlignment="Bottom">
             <TextBlock x:Name="status" Text="Loading..." HorizontalAlignment="Center" Foreground="White" />
             <ProgressBar x:Name="progress" Minimum="0" Maximum="100" HorizontalAlignment="Stretch" Foreground="#AE56FF" 

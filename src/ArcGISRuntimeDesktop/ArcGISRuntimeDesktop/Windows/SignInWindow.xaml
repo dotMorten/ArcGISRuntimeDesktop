@@ -11,6 +11,10 @@
     <Grid RequestedTheme="Dark">
         <Border Background="#000" />
         <Image Source="ms-appx:///Assets/HeroImages/Hero2.jpg" Opacity=".7" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <Border Background="#22000000" Height="32" VerticalAlignment="Top" >
+            <TextBlock Text="{local:StringResource Key=AppNamePoweredBy}" HorizontalAlignment="Left" Foreground="White"
+           VerticalAlignment="Center" Margin="10,0,0,0" Style="{StaticResource BaseTextBlockStyle}" />
+        </Border>
         <StackPanel Padding="20" VerticalAlignment="Center" Margin="0,250,0,0">
             <TextBlock Text="Sign into ArcGIS Online" Foreground="White" HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}"  />
             <TextBlock Text="An ArcGIS Online Account is required to use this application" Foreground="White"

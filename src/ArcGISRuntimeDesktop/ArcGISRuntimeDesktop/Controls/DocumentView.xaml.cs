@@ -125,6 +125,7 @@ public sealed partial class DocumentView : UserControl
             if (Document is MapDocument mapdoc)
                 mapdoc.ActiveLocationDisplay = mapView.LocationDisplay;
         }
+        editorToolbar.GeoView = activeView;
     }
 
     private async void GeoView_RightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -135,46 +136,107 @@ public sealed partial class DocumentView : UserControl
         //MenuFlyout f = new MenuFlyout();
         //f.XamlRoot = geoview.XamlRoot;
         //geoview.ContextFlyout = f;
-        flyout.Items.Add(new MenuFlyoutItem() { Text =  "Identify" /*LocalizedStrings.GetString("GeoView_ContextMenu_Identify")*/ });
-        //flyout.Items.Add(new MenuFlyoutItem() { Text = "Select", IsEnabled = false });
-        //flyout.Placement = Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.Auto;
-
-        flyout.ShowAt(geoview, pos);
-        ((MenuFlyoutItem)flyout.Items[0]).Click += async (s, e) =>
+        if (geoview is MapView mapview && mapview.GeometryEditor.IsStarted)
         {
-            try
+            flyout.Items.Add(new MenuFlyoutItem()
             {
-                var result = await geoview.IdentifyLayersAsync(pos, 2, false, 1);
-                var elm = result.FirstOrDefault()?.GeoElements?.FirstOrDefault();
-                if (elm != null)
+                Text = "Complete drawing"
+            });
+            ((MenuFlyoutItem)flyout.Items[0]).Click += (s,e) => mapview.GeometryEditor.Stop();
+            if(mapview.GeometryEditor.SelectedElement is Esri.ArcGISRuntime.UI.Editing.GeometryEditorVertex)
+            {
+                flyout.Items.Add(new MenuFlyoutItem()
                 {
-                    if (elm is Esri.ArcGISRuntime.ILoadable iload)
-                        await iload.LoadAsync();
-                    var mp = elm.Geometry as MapPoint;
-                    if (mp is null)
-                        mp = (geoview as MapView)?.ScreenToLocation(pos) ?? (geoview as SceneView)?.ScreenToBaseSurface(pos);
-                    if (mp is not null)
-                    {
-                        var popup = new GeoElementView() { Element = elm };
-                        popup.Close += (s, e) => geoview.DismissCallout();
-                        geoview.ShowCalloutAt(mp, popup);
-                    }
-                }
-                else
-                {
-                    MapPoint? loc = (geoview as MapView)?.ScreenToLocation(pos) ?? await ((geoview as SceneView)?.ScreenToLocationAsync(pos) ?? Task.FromResult<MapPoint?>(null));
-                    if (loc != null)
-                    {
-                        string coordinate = CoordinateFormatter.ToLatitudeLongitude(loc, LatitudeLongitudeFormat.DegreesDecimalMinutes, 3);
-                        if(loc.HasZ)
-                        {
-                            coordinate += " Z=" + loc.Z.ToString("0.###");
-                        }
-                        geoview.ShowCalloutAt(loc, new Esri.ArcGISRuntime.UI.CalloutDefinition(coordinate));
-                    }
-                }
+                    Text = "Delete selected vertex"
+                });
+                ((MenuFlyoutItem)flyout.Items.Last()).Click += (s, e) => mapview.GeometryEditor.DeleteSelectedElement();
             }
-            catch { }
-        };
+            if (mapview.GeometryEditor.SelectedElement is Esri.ArcGISRuntime.UI.Editing.GeometryEditorPart)
+            {
+                flyout.Items.Add(new MenuFlyoutItem()
+                {
+                    Text = "Delete select part"
+                });
+                ((MenuFlyoutItem)flyout.Items.Last()).Click += (s, e) => mapview.GeometryEditor.DeleteSelectedElement();
+            }
+            if (mapview.GeometryEditor.SelectedElement is Esri.ArcGISRuntime.UI.Editing.GeometryEditorGeometry)
+            {
+                flyout.Items.Add(new MenuFlyoutItem()
+                {
+                    Text = "Delete geometry"
+                });
+                ((MenuFlyoutItem)flyout.Items.Last()).Click += (s, e) => mapview.GeometryEditor.DeleteSelectedElement();
+            }
+            if (mapview.GeometryEditor.CanUndo)
+            {
+                flyout.Items.Add(new MenuFlyoutItem()
+                {
+                    Text = "Undo"
+                });
+                ((MenuFlyoutItem)flyout.Items.Last()).Click += (s, e) => mapview.GeometryEditor.Undo();
+            }
+            if (mapview.GeometryEditor.CanRedo)
+            {
+                flyout.Items.Add(new MenuFlyoutItem()
+                {
+                    Text = "Redo"
+                });
+                ((MenuFlyoutItem)flyout.Items.Last()).Click += (s, e) => mapview.GeometryEditor.Redo();
+            }
+        }
+        else {
+            flyout.Items.Add(new MenuFlyoutItem() { Text = "Identify" /*LocalizedStrings.GetString("GeoView_ContextMenu_Identify")*/ });
+            flyout.Items.Add(new MenuFlyoutItem() { Text = "Draw Polygon" /*LocalizedStrings.GetString("GeoView_ContextMenu_Identify")*/ });
+
+            //flyout.Items.Add(new MenuFlyoutItem() { Text = "Select", IsEnabled = false });
+            //flyout.Placement = Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.Auto;
+
+
+            ((MenuFlyoutItem)flyout.Items[0]).Click += async (s, e) =>
+            {
+                try
+                {
+                    var result = await geoview.IdentifyLayersAsync(pos, 2, false, 1);
+                    var elm = result.FirstOrDefault()?.GeoElements?.FirstOrDefault();
+                    if (elm != null)
+                    {
+                        if (elm is Esri.ArcGISRuntime.ILoadable iload)
+                            await iload.LoadAsync();
+                        var mp = elm.Geometry as MapPoint;
+                        if (mp is null)
+                            mp = (geoview as MapView)?.ScreenToLocation(pos) ?? (geoview as SceneView)?.ScreenToBaseSurface(pos);
+                        if (mp is not null)
+                        {
+                            var popup = new GeoElementView() { Element = elm };
+                            popup.Close += (s, e) => geoview.DismissCallout();
+                            geoview.ShowCalloutAt(mp, popup);
+                        }
+                    }
+                    else
+                    {
+                        MapPoint? loc = (geoview as MapView)?.ScreenToLocation(pos) ?? await ((geoview as SceneView)?.ScreenToLocationAsync(pos) ?? Task.FromResult<MapPoint?>(null));
+                        if (loc != null)
+                        {
+                            string coordinate = CoordinateFormatter.ToLatitudeLongitude(loc, LatitudeLongitudeFormat.DegreesDecimalMinutes, 3);
+                            if (loc.HasZ)
+                            {
+                                coordinate += " Z=" + loc.Z.ToString("0.###");
+                            }
+                            geoview.ShowCalloutAt(loc, new Esri.ArcGISRuntime.UI.CalloutDefinition(coordinate));
+                        }
+                    }
+                }
+                catch { }
+            };
+
+            ((MenuFlyoutItem)flyout.Items[1]).Click += async (s, e) =>
+            {
+                if (this.activeView is MapView mv)
+                {
+                    mv.GeometryEditor.Start(GeometryType.Polygon);
+                }
+            };
+        }
+        flyout.ShowAt(geoview, pos);
     }
 }

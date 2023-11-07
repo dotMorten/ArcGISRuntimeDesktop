@@ -101,13 +101,10 @@
                             </StackPanel>
                         </Flyout>
                     </Button.Flyout>
-                    <StackPanel Orientation="Horizontal">
-                        <Ellipse Width="32" Height="32" Stroke="Gray" StrokeThickness="1">
-                            <Ellipse.Fill>
-                                <ImageBrush ImageSource="{x:Bind ViewModel.PortalUserThumbnail, Mode=OneWay}" />
-                            </Ellipse.Fill>
-                        </Ellipse>
-                    </StackPanel>
+                        <PersonPicture 
+                            ProfilePicture="{x:Bind ViewModel.PortalUserThumbnail, Mode=OneWay}" Height="32"
+                            DisplayName="{x:Bind ViewModel.PortalUser.FullName, Mode=OneWay}"
+                            BadgeText="{x:Bind ViewModel.PortalUser.FullName, Mode=OneWay}" />
                 </Button>
             </StackPanel>
         </NavigationView.PaneFooter>

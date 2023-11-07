@@ -10,6 +10,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tk="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:tk2="using:CommunityToolkit.WinUI.Controls"
     mc:Ignorable="d"
     RequestedTheme="{x:Bind ViewModel.AppSettings.Theme,Mode=OneWay}">
 
@@ -146,8 +147,17 @@
                         </Grid>
                     </NavigationView>
                 </SplitView.Pane>
-
-                <TabView VerticalAlignment="Stretch" Grid.Row="0" Margin="0,-3,0,0"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <tk2:PropertySizer HorizontalAlignment="Left"
+                                    Binding="{x:Bind splitViewPane.OpenPaneLength, Mode=TwoWay}"
+                                    Maximum="440"
+                                    Minimum="52"
+                                    Visibility="{x:Bind splitViewPane.IsPaneOpen, Mode=OneWay}" />
+                    <TabView VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="1" Margin="0,-3,0,0"
                      TabItemsSource="{x:Bind ViewModel.Documents, Mode=OneWay}" 
                      SelectedItem="{x:Bind ViewModel.ActiveDocument, Mode=TwoWay}"
                      AddTabButtonClick="{x:Bind ViewModel.NewMapDocument}">
@@ -161,6 +171,7 @@
                         </DataTemplate>
                     </TabView.TabItemTemplate>
                 </TabView>
+                </Grid>
             </SplitView>
         </Grid>
 

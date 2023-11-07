@@ -25,12 +25,14 @@
     
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.0.230907" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.0.230907" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Animations" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Input" Version="7.1.2" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.231008000" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.1" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
     <PackageReference Include="WinUIEx" Version="2.3.2" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>

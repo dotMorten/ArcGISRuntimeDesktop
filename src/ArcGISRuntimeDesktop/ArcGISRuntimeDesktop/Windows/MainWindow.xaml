@@ -7,10 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:ex="using:WinUIEx"
-    Title="ArcGIS Runtime Desktop"
+    Title="Desktop App - Powered by ArcGIS Maps SDK for .NET"
     mc:Ignorable="d">
-    <ex:WindowEx.Backdrop>
-        <ex:MicaSystemBackdrop />
-    </ex:WindowEx.Backdrop>
-<views:RootView  />
+    <ex:WindowEx.SystemBackdrop>
+        <MicaBackdrop />
+    </ex:WindowEx.SystemBackdrop>
+    <views:RootView  />
 </ex:WindowEx>

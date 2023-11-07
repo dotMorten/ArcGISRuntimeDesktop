@@ -11,6 +11,7 @@ public partial class App : Application
     /// </summary>
     public App()
     {
+        if (WinUIEx.WebAuthenticator.CheckOAuthRedirectionActivation()) return;
         this.InitializeComponent();
         Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
     }

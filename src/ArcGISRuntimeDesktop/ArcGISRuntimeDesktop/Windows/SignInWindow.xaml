@@ -1,4 +1,4 @@
-﻿<winuiex:WindowEx
+﻿<Window
     x:Class="ArcGISRuntimeDesktop.Windows.SignInWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,17 +6,20 @@
     xmlns:winuiex="using:WinUIEx"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Width="800" Height="400">
+    mc:Ignorable="d">
 
     <Grid RequestedTheme="Dark">
-        <Image Source="ms-appx:///Assets/heroimage.png" Stretch="UniformToFill" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <Border Background="#000" />
+        <Image Source="ms-appx:///Assets/HeroImages/Hero2.jpg" Opacity=".7" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
         <StackPanel Padding="20" VerticalAlignment="Center" Margin="0,250,0,0">
             <TextBlock Text="Sign into ArcGIS Online" Foreground="White" HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}"  />
-            <TextBlock Text="An ArcGIS Online Account is required to license this application"  Foreground="White"
-                       FontSize="14" Style="{StaticResource SubheaderTextBlockStyle}" HorizontalAlignment="Center" Margin="10" />
-            <Button Content="Sign in" Click="SignIn_Click" HorizontalAlignment="Center" Margin="10" Width="200" />
+            <TextBlock Text="An ArcGIS Online Account is required to use this application" Foreground="White"
+                       FontSize="14" Style="{StaticResource BodyStrongTextBlockStyle}" HorizontalAlignment="Center" Margin="10" />
+            <Button Content="Sign in" Click="SignIn_Click"
+                    Background="#66000000" BorderBrush="Gray"
+                    HorizontalAlignment="Center" Margin="10" Width="200" />
             <TextBlock x:Name="status" HorizontalAlignment="Center" Foreground="White" TextWrapping="Wrap" />
         </StackPanel>
 
     </Grid>
-</winuiex:WindowEx>
+</Window>

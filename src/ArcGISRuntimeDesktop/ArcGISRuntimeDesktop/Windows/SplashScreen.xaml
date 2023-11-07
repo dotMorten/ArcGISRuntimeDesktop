@@ -9,8 +9,8 @@
     mc:Ignorable="d" >
 
     <Grid Background="#130D4E" RequestedTheme="Dark">
-        
-        <Image Source="ms-appx:///Assets/heroimage.png" Stretch="UniformToFill" HorizontalAlignment="Right" VerticalAlignment="Center" />
+
+        <Image Source="ms-appx:///Assets/HeroImages/Hero2.jpg" Stretch="UniformToFill" HorizontalAlignment="Right" VerticalAlignment="Center" />
         <TextBlock Text="ArcGIS Runtime Desktop" HorizontalAlignment="Center" Foreground="White"
                    VerticalAlignment="Center" Margin="0,250,0,0" Style="{StaticResource TitleTextBlockStyle}" />
         <StackPanel VerticalAlignment="Bottom">

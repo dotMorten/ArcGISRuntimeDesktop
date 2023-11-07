@@ -19,8 +19,7 @@
         </StackPanel>
         <StackPanel VerticalAlignment="Bottom">
             <TextBlock x:Name="status" Text="Loading..." HorizontalAlignment="Center" Foreground="White" />
-            <ProgressBar x:Name="progress" Minimum="0" Maximum="100" HorizontalAlignment="Stretch" Foreground="#AE56FF" 
-                   Margin="10" />
+            <ProgressBar x:Name="progress" Minimum="0" Maximum="100" HorizontalAlignment="Stretch" Foreground="White" Margin="10" />
         </StackPanel>
     </Grid>
 </winuiex:SplashScreen>

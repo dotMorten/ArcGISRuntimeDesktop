@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows10.0.17763</TargetFramework>
-    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <TargetFramework>net8.0-windows10.0.19041</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
     <UseWinUI>true</UseWinUI>
     <Authors>Esri Inc.</Authors>
     <Company>Esri</Company>
@@ -12,6 +12,8 @@
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
     <IncludeXamlFilesInNugetPackage>False</IncludeXamlFilesInNugetPackage>
     <DisableEmbeddedXbf>false</DisableEmbeddedXbf>
+    <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
+    <UseRidGraph>true</UseRidGraph>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,14 +29,14 @@
   </ItemGroup>
 
   <ItemGroup>
-      <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
-      <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.194" />
+      <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.231008000" />
+      <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.1" />
   </ItemGroup>
 
   <!-- Ensure content is packaged so build process can find it -->
   <ItemGroup>
-    <Content Update="Fonts\*.*" PackagePath="contentFiles\any\net6.0-windows10.0.17763\$(PackageId)\Fonts\%(Filename)%(Extension);lib\net6.0-windows10.0.17763\$(PackageId)\Fonts\%(Filename)%(Extension)" />
-    <Content Update="Icons\**\*.*" PackagePath="contentFiles\any\net6.0-windows10.0.17763\$(PackageId)\Icons\%(RecursiveDir)%(Filename)%(Extension);lib\net6.0-windows10.0.17763\$(PackageId)\Icons\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Update="Fonts\*.*" PackagePath="contentFiles\any\$(TargetFramework.TrimEnd('.0'))\$(PackageId)\Fonts\%(Filename)%(Extension);lib\$(TargetFramework.TrimEnd('.0'))\$(PackageId)\Fonts\%(Filename)%(Extension)" />
+    <Content Update="Icons\**\*.*" PackagePath="contentFiles\any\$(TargetFramework.TrimEnd('.0'))\$(PackageId)\Icons\%(RecursiveDir)%(Filename)%(Extension);lib\$(TargetFramework.TrimEnd('.0'))\$(PackageId)\Icons\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>

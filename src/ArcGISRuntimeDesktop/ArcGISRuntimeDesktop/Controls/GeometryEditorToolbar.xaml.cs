@@ -75,11 +75,15 @@ namespace ArcGISRuntimeDesktop.Controls
                 RedoCommand.NotifyCanExecuteChanged();
             if (e.PropertyName == nameof(GeometryEditor.SelectedElement))
             {
+                if (GeometryEditor?.Tool is VertexTool tool)
+                    tool.Configuration.AllowPartCreation = false;
                 DeleteSelectedCommand.NotifyCanExecuteChanged();
                 ClearSelectionCommand.NotifyCanExecuteChanged();
             }
             if (e.PropertyName == nameof(GeometryEditor.Geometry))
             {
+                if (GeometryEditor?.Tool is VertexTool tool)
+                    tool.Configuration.AllowPartCreation = false;
                 AddPartCommand.NotifyCanExecuteChanged();
                 FinishCommand.NotifyCanExecuteChanged();
             }
@@ -108,24 +112,23 @@ namespace ArcGISRuntimeDesktop.Controls
         private bool CanDeleteSelected => this.GeometryEditor?.SelectedElement != null && this.GeometryEditor?.SelectedElement is not GeometryEditorMidVertex;
 
         [RelayCommand(CanExecute = nameof(CanDeleteSelected))]
-        private void DeleteSelected()
-        {
-            GeometryEditor?.DeleteSelectedElement();
-        }
+        private void DeleteSelected() => GeometryEditor?.DeleteSelectedElement();
 
         private bool CanClearSelection => this.GeometryEditor?.SelectedElement != null;
 
         [RelayCommand(CanExecute = nameof(CanClearSelection))]
-        private void ClearSelection()
-        {
-            GeometryEditor?.ClearSelection();
-        }
+        private void ClearSelection() => GeometryEditor?.ClearSelection();
 
-        private bool CanAddPart => false; // TODO CanFinish && GeometryEditor != null && (GeometryEditor.Geometry is Polygon || GeometryEditor.Geometry is Polyline polyline);
+        private bool CanAddPart => GeometryEditor?.Tool is VertexTool tool && GeometryEditor ?.Geometry?.IsEmpty == false && GeometryEditor != null && (GeometryEditor.Geometry is Polygon || GeometryEditor.Geometry is Polyline polyline);
 
         [RelayCommand(CanExecute = nameof(CanAddPart))]
         private void AddPart()
         {
+            if(GeometryEditor?.Tool is VertexTool tool)
+            {
+                ClearSelection();
+                tool.Configuration.AllowPartCreation = true;
+            }
             // TODO
             // if (GeometryEditor?.Geometry is Polygon polygon)
             // {

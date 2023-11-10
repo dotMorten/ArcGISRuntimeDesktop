@@ -188,7 +188,6 @@ public sealed partial class DocumentView : UserControl
         }
         else {
             flyout.Items.Add(new MenuFlyoutItem() { Text = "Identify" /*LocalizedStrings.GetString("GeoView_ContextMenu_Identify")*/ });
-            flyout.Items.Add(new MenuFlyoutItem() { Text = "Draw Polygon" /*LocalizedStrings.GetString("GeoView_ContextMenu_Identify")*/ });
 
             //flyout.Items.Add(new MenuFlyoutItem() { Text = "Select", IsEnabled = false });
             //flyout.Placement = Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.Auto;

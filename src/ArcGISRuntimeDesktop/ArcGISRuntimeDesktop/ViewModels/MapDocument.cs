@@ -1,5 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Ogc;
 using Esri.ArcGISRuntime.UI;
+using Esri.ArcGISRuntime.UI.Editing;
 
 namespace ArcGISRuntimeDesktop.ViewModels;
 public class MapDocument : Document
@@ -35,4 +36,18 @@ public class MapDocument : Document
         set { _locationDisplay = value; OnPropertyChanged(); }
     }
 
+    private GeometryEditor? _GeometryEditor;
+
+    public GeometryEditor? GeometryEditor
+    {
+        get { return _GeometryEditor; }
+        set
+        {
+            if (value != _GeometryEditor)
+            {
+                _GeometryEditor = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 }

@@ -7,23 +7,31 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Grid>
-    <StackPanel MaxWidth="300" MaxHeight="300">
-        <TextBlock x:Name="DisplayField" FontWeight="Bold" />
-        
-        <ItemsControl x:Name="ItemsView">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="local:GeoElementViewItemData">
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBlock Text="{x:Bind Name}" />
-                        <TextBlock Text=":"/>
-                        <TextBlock Text="{x:Bind Value}" FontWeight="Bold"  />
-                    </StackPanel>                    
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-        
-        <WebView2 x:Name="webView" Visibility="Collapsed" Width="300" Height="200" />
-    </StackPanel>
+        <Grid MaxWidth="300" MaxHeight="300">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="DisplayField" FontWeight="Bold" />
+
+            <ScrollViewer MaxHeight="300" Grid.Row="1">
+                <ItemsControl x:Name="ItemsView">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="local:GeoElementViewItemData">
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="{x:Bind Name}" />
+                                <TextBlock Text=":"/>
+                                <TextBlock Text="{x:Bind Value}" FontWeight="Bold"  />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <WebView2 x:Name="webView" Visibility="Collapsed" Width="300" Height="200" Grid.Row="1" />
+            <Button Content="Edit" Click="Edit_Click" Grid.Row="2" />
+
+        </Grid>
         <SymbolIcon Symbol="Cancel" HorizontalAlignment="Right" VerticalAlignment="Top"
                     PointerPressed="Close_PointerPressed" Margin="-3"/>
     </Grid>

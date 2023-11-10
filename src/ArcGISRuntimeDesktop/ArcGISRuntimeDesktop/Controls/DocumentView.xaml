@@ -13,7 +13,7 @@
     <UserControl.Resources>
         <DataTemplate x:Key="mapTemplate" x:DataType="vm:MapDocument">
             <esri:MapView Map="{x:Bind Map, Mode=OneWay}" PointerMoved="GeoView_PointerMoved" Loaded="GeoView_Loaded"
-                          AllowDrop="True" Drop="GeoView_Drop"
+                          AllowDrop="True" Drop="GeoView_Drop" GeometryEditor="{x:Bind GeometryEditor, Mode=OneWay}"
                           DragOver="GeoView_DragOver" RightTapped="GeoView_RightTapped"
                           >
             </esri:MapView>

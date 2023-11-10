@@ -28,7 +28,7 @@
             <NavigationViewItem Content="Insert" x:Name="InsertTab"  IsEnabled="False"/>
             <NavigationViewItem Content="Analysis" x:Name="AnalysisTab"  IsEnabled="False"/>
             <NavigationViewItem Content="View" x:Name="ViewTab"  IsEnabled="False"/>
-            <NavigationViewItem Content="Edit" x:Name="EditTab"  IsEnabled="False"/>
+            <NavigationViewItem Content="Edit" x:Name="EditTab"  IsEnabled="{x:Bind ViewModel.ActiveDocument.CanEdit, Mode=OneWay}"/>
             <NavigationViewItem Content="Imagery" x:Name="ImageryTab"  IsEnabled="False"/>
             <NavigationViewItem Content="Share" x:Name="ShareTab"  IsEnabled="False"/>
         </NavigationView.MenuItems>
@@ -77,6 +77,7 @@
                 <StackPanel Visibility="{x:Bind InsertTab.IsSelected, Mode=OneWay}" Orientation="Horizontal">
                     <AppBarButton Label="Insert" Icon="Paste" />
                 </StackPanel>
+                <local:EditTab Visibility="{x:Bind EditTab.IsSelected, Mode=OneWay}" Document="{x:Bind ViewModel.ActiveDocument, Mode=OneWay}" />
             </Grid>
         </NavigationView.Content>
         <NavigationView.PaneFooter>

@@ -1,4 +1,6 @@
-﻿using Esri.ArcGISRuntime.Geometry;
+﻿using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using Microsoft.UI.Xaml.Input;
 
@@ -136,7 +138,7 @@ public sealed partial class DocumentView : UserControl
         //MenuFlyout f = new MenuFlyout();
         //f.XamlRoot = geoview.XamlRoot;
         //geoview.ContextFlyout = f;
-        if (geoview is MapView mapview && mapview.GeometryEditor.IsStarted)
+        if (geoview is MapView mapview && mapview.GeometryEditor?.IsStarted == true)
         {
             flyout.Items.Add(new MenuFlyoutItem()
             {
@@ -208,6 +210,7 @@ public sealed partial class DocumentView : UserControl
                         if (mp is not null)
                         {
                             var popup = new GeoElementView() { Element = elm };
+                            popup.OnFeatureEditRequested += (s, f) => this.Document.CurrentSelection = new Document.Selection(f);
                             popup.Close += (s, e) => geoview.DismissCallout();
                             geoview.ShowCalloutAt(mp, popup);
                         }
@@ -238,5 +241,33 @@ public sealed partial class DocumentView : UserControl
             };
         }
         flyout.ShowAt(geoview, pos);
+    }
+
+    TaskCompletionSource EditFeatureCompletion;
+    private void EditFeature(Feature feature)
+    {
+        EditFeatureCompletion?.SetResult();
+        var source = EditFeatureCompletion = new TaskCompletionSource();
+        
+        if (feature.FeatureTable.Layer is FeatureLayer flayer)
+        {
+            flayer.SetFeatureVisible(feature, false);
+            //flayer.ClearSelection();
+            //flayer.SelectFeature(feature);
+            Graphic g = new Graphic(feature.Geometry, flayer.Renderer.GetSymbol(feature, true));
+            var editOverlay = new GraphicsOverlay();
+            editOverlay.Graphics.Add(g);
+            var overlays = activeView.GraphicsOverlays;
+            overlays.Add(editOverlay);
+            source.Task.ContinueWith((t) =>
+            {
+                overlays.Remove(editOverlay);
+                flayer.SetFeatureVisible(feature, true);
+            });
+            if (this.activeView is MapView mv)
+            {
+                mv.GeometryEditor.Start(feature.Geometry);
+            }
+        }
     }
 }

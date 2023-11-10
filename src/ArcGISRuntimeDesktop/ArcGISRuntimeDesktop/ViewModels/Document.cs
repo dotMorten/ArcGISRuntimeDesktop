@@ -1,5 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.UI;
 using System.Text;
 using Windows.Storage;
 
@@ -59,6 +60,53 @@ public abstract partial class Document : BaseViewModel
             System.Diagnostics.Debug.WriteLine("Failed to load layer: " + ex.Message);
         }
     }
+
+    public class Selection : IDisposable
+    {
+        public Selection(Feature feature)
+        {
+            SelectedElement = feature; 
+            Owner = feature.FeatureTable?.Layer;
+            if (feature.FeatureTable?.Layer is FeatureLayer l)
+                l.SelectFeature(feature);
+        }
+        
+        public Selection(Graphic graphic, GraphicsOverlay overlay)
+        {
+            SelectedElement = graphic; Owner = overlay; graphic.IsSelected = true;
+        }
+
+        public GeoElement? SelectedElement { get; set; }
+        public bool CanEdit => true;
+        public object? Owner { get; set; }
+        public Layer? OwnerLayer => Owner as Layer;
+        public GraphicsOverlay? OwnerGraphicsOverlay=> Owner as GraphicsOverlay;
+
+        public void Dispose()
+        {
+            if (SelectedElement is Graphic g)
+                g.IsSelected = false;
+            else if(SelectedElement is Feature feature)
+                (feature.FeatureTable?.Layer as FeatureLayer)?.UnselectFeature(feature);
+        }
+    }
+
+    public bool CanEdit => CurrentSelection?.CanEdit == true;
+
+    private Selection? _selection;
+
+    public Selection? CurrentSelection
+    {
+        get { return _selection; }
+        set
+        {
+            _selection?.Dispose();
+            _selection = value;
+            base.OnPropertyChanged();
+            OnPropertyChanged(nameof(CanEdit));
+        }
+    }
+
 
     public void ZoomTo(Viewpoint viewpoint)
     {

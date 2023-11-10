@@ -14,9 +14,6 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace ArcGISRuntimeDesktop.Controls
 {
     public sealed partial class GeoElementView : UserControl
@@ -86,7 +83,6 @@ namespace ArcGISRuntimeDesktop.Controls
                                 DisplayField.Text = item.Value?.ToString();
                                 data.Remove(item);
                             }
-
                         }
                     }
                 }
@@ -98,6 +94,17 @@ namespace ArcGISRuntimeDesktop.Controls
             Close?.Invoke(this, EventArgs.Empty);
         }
         public event EventHandler? Close;
+
+        private void Edit_Click(object sender, RoutedEventArgs e)
+        {
+            if (Element is Feature feature)
+            {
+                OnFeatureEditRequested?.Invoke(this, feature);
+            }
+            Close?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler<Feature> OnFeatureEditRequested;
     }
 
     public class GeoElementViewItemData

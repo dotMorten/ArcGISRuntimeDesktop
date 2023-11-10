@@ -45,7 +45,7 @@
   <!-- Set up Runtime references -->
   <PropertyGroup>
     <UseProjectReferences Condition="Exists('$(SolutionDir)Esri.ArcGISRuntime\Esri.ArcGISRuntime.csproj')">true</UseProjectReferences>
-    <RuntimeNugetPackageVersion>200.2.0</RuntimeNugetPackageVersion>
+    <RuntimeNugetPackageVersion>200.3.0-daily4053</RuntimeNugetPackageVersion>
   </PropertyGroup>
   <ItemGroup Condition="'$(UseProjectReferences)'=='true'">
     <ProjectReference Include="$(SolutionDir)Esri.ArcGISRuntime\Esri.ArcGISRuntime.csproj" />

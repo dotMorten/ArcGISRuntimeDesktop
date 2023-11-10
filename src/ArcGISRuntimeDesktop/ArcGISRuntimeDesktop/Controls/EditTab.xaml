@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="ArcGISRuntimeDesktop.Controls.EditTab"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:root="using:ArcGISRuntimeDesktop"
+    xmlns:local="using:ArcGISRuntimeDesktop.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Orientation="Horizontal">
+        <AppBarButton Label="{root:StringResource Key=Undo}" Command="{x:Bind UndoCommand}">
+            <FontIcon Glyph="{StaticResource calcite_glyphicon_Undo}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+        </AppBarButton>
+        <AppBarButton Label="{root:StringResource Key=Redo}" Command="{x:Bind RedoCommand}">
+            <FontIcon Glyph="{StaticResource calcite_glyphicon_Redo}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+        </AppBarButton>
+        <AppBarButton Label="Unselect">
+            <FontIcon Glyph="{StaticResource calcite_glyphicon_Unselected}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+        </AppBarButton>
+        <AppBarButton Label="Delete" Icon="Delete">
+            <FontIcon Glyph="{StaticResource calcite_glyphicon_Trash}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+        </AppBarButton>
+        <AppBarButton Label="Edit Vertices" Command="{x:Bind EditVerticesCommand}">
+            <FontIcon Glyph="{StaticResource calcite_glyphicon_VertexEdit}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+        </AppBarButton>
+        <AppBarButton Label="Move" Command="{x:Bind MoveCommand}">
+            <FontIcon Glyph="{StaticResource calcite_glyphicon_Move}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+        </AppBarButton>
+        <AppBarButton Label="Rotate" Command="{x:Bind RotateCommand}">
+            <FontIcon Glyph="{StaticResource calcite_glyphicon_Rotate}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+        </AppBarButton>
+        <AppBarButton Label="Reshape" Command="{x:Bind ReshapeCommand}">
+            <FontIcon Glyph="{StaticResource calcite_glyphicon_Shapes}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+        </AppBarButton>
+        <AppBarButton Label="Reshape Accept" Command="{x:Bind ReshapeAcceptCommand}">
+            <FontIcon Glyph="{StaticResource calcite_glyphicon_Shapes}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+        </AppBarButton>
+    </StackPanel>
+</UserControl>

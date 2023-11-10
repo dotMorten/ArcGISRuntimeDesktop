@@ -230,14 +230,6 @@ public sealed partial class DocumentView : UserControl
                 }
                 catch { }
             };
-
-            ((MenuFlyoutItem)flyout.Items[1]).Click += async (s, e) =>
-            {
-                if (this.activeView is MapView mv)
-                {
-                    mv.GeometryEditor.Start(GeometryType.Polygon);
-                }
-            };
         }
         flyout.ShowAt(geoview, pos);
     }

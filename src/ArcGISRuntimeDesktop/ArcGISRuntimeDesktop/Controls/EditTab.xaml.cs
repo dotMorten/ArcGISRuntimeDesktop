@@ -5,14 +5,14 @@ using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Editing;
 using Microsoft.UI.Xaml.Data;
+using System.Diagnostics;
 using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
 namespace ArcGISRuntimeDesktop.Controls;
 public sealed partial class EditTab : UserControl
 {
-    private readonly GeometryEditor editor = new GeometryEditor();
-    GeometryEditor reshapeEditor = new GeometryEditor();
-    MyGeometryEditorHelper? helper;
+    private readonly MyGeometryEditor editor = new MyGeometryEditor();
+    private readonly GeometryEditor reshapeEditor = new GeometryEditor();
     public EditTab()
     {
         reshapeEditor.PropertyChanged += ReshapeEditor_PropertyChanged;
@@ -24,7 +24,8 @@ public sealed partial class EditTab : UserControl
 
     private void ReshapeEditor_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        ReshapeAcceptCommand.NotifyCanExecuteChanged();
+        if (e.PropertyName == nameof(GeometryEditor.Geometry))
+            ReshapeAcceptCommand.NotifyCanExecuteChanged();
     }
 
     private void Editor_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -33,6 +34,11 @@ public sealed partial class EditTab : UserControl
         {
             case nameof(GeometryEditor.CanUndo): UndoCommand.NotifyCanExecuteChanged(); break;
             case nameof(GeometryEditor.CanRedo): RedoCommand.NotifyCanExecuteChanged(); break;
+            case nameof(MyGeometryEditor.Geometry):
+                {
+                    ReshapeCommand.NotifyCanExecuteChanged();
+                    break;
+                }
         }
     }
 
@@ -56,6 +62,7 @@ public sealed partial class EditTab : UserControl
 
     private void OnSelectionPropertyChanged()
     {
+        editor.Stop();
         if (Selection?.SelectedElement?.Geometry != null)
         {
             Symbol? symbol = null;
@@ -66,15 +73,15 @@ public sealed partial class EditTab : UserControl
                 symbol = (f.FeatureTable?.Layer as FeatureLayer)?.Renderer?.GetSymbol(f, true) ??
                     (f.FeatureTable as ArcGISFeatureTable)?.LayerInfo?.DrawingInfo?.Renderer?.GetSymbol(f, true);
             }
-            helper = new MyGeometryEditorHelper(editor, Selection.SelectedElement.Geometry, symbol);
+            editor.Initialize(Selection.SelectedElement.Geometry, symbol);
         }
-        else
-            helper = null;
         EditVerticesCommand.NotifyCanExecuteChanged();
         RotateCommand.NotifyCanExecuteChanged();
         MoveCommand.NotifyCanExecuteChanged();
         UndoCommand.NotifyCanExecuteChanged();
         RedoCommand.NotifyCanExecuteChanged();
+        ReshapeCommand.NotifyCanExecuteChanged();
+        ReshapeAcceptCommand.NotifyCanExecuteChanged();
     }
 
     private void OnDocumentPropertyChanged(Document? oldDocument, Document? newDocument)
@@ -96,7 +103,7 @@ public sealed partial class EditTab : UserControl
             mapdoc.GeometryEditor = editor;
         }
         SetElementVisibility(false);
-        helper.EditVertices();
+        editor.EditVertices();
     }
     private bool CanMove => Document is MapDocument mapdoc && mapdoc.CurrentSelection?.CanEdit == true && mapdoc.CurrentSelection?.SelectedElement?.Geometry is Geometry;
 
@@ -108,7 +115,7 @@ public sealed partial class EditTab : UserControl
             mapdoc.GeometryEditor = editor;
         }
         SetElementVisibility(false);
-        helper.Move();
+        editor.Move();
     }
 
     private bool CanUndo() => editor.CanUndo;
@@ -127,7 +134,7 @@ public sealed partial class EditTab : UserControl
             mapdoc.GeometryEditor = editor;
         }
         SetElementVisibility(false);
-        helper.Rotate();
+        editor.Rotate();
     }
     private void SetElementVisibility(bool visible)
     {
@@ -139,7 +146,7 @@ public sealed partial class EditTab : UserControl
         }
     }
 
-    private bool CanReshape => true; //TODO
+    private bool CanReshape => !reshapeEditor.IsStarted && editor.Geometry?.IsEmpty == false && editor.Geometry is Polygon; //TODO
 
     [RelayCommand(CanExecute = nameof(CanReshape))]
     public void Reshape()
@@ -150,25 +157,34 @@ public sealed partial class EditTab : UserControl
             reshapeEditor.Start(GeometryType.Polyline);
             ReshapeAcceptCommand.NotifyCanExecuteChanged();
             SetElementVisibility(true);
+            ReshapeCommand.NotifyCanExecuteChanged();
+            ReshapeAcceptCommand.NotifyCanExecuteChanged();
         }
     }
-    private bool CanAcceptReshape => reshapeEditor.IsStarted && reshapeEditor.Geometry?.IsEmpty == false;
+    private bool CanAcceptReshape => reshapeEditor.IsStarted &&
+        this.editor.Geometry is Multipart mp && !mp.IsEmpty && reshapeEditor.Geometry is Polyline line && !line.IsEmpty &&
+        GeometryEngine.Reshape(mp, line) != null;
 
     [RelayCommand(CanExecute = nameof(CanAcceptReshape))]
     public void ReshapeAccept()
     {
         var geometry = reshapeEditor.Stop();
-        if (editor.Geometry is Multipart mp && geometry is Polyline && !mp.IsEmpty && !geometry.IsEmpty)
-            editor.ReplaceGeometry(GeometryEngine.Reshape(this.editor.Geometry as Multipart, geometry as Polyline));
+        if (editor.Geometry is Multipart mp && geometry is Polyline line && !mp.IsEmpty && !line.IsEmpty)
+        {
+            var reshapedGeometry = GeometryEngine.Reshape(mp, line);
+            if (reshapedGeometry != null)
+                editor.ReplaceGeometry(reshapedGeometry);
+        }
         if (Document is MapDocument mapdoc)
         {
-
             SetElementVisibility(false);
             mapdoc.GeometryEditor = editor;
         }
+        ReshapeCommand.NotifyCanExecuteChanged();
+        ReshapeAcceptCommand.NotifyCanExecuteChanged();
     }
 
-    public class MyGeometryEditorHelper : GeometryEditor
+    public class MyGeometryEditor : GeometryEditor
     {
         private VertexTool _moveTool = new VertexTool()
         {
@@ -241,67 +257,97 @@ public sealed partial class EditTab : UserControl
                 FeedbackVertexSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.Black, 10),
             }
         };
+        private VertexTool _inactiveTool = new VertexTool()
+        {
 
-        private GeometryEditor _editor;
-        private Geometry _geometry;
+            Configuration = new InteractionConfiguration()
+            {
+                AllowMovingSelectedElement = false,
+                AllowMidVertexSelection = false,
+                AllowDeletingSelectedElement = false,
+                AllowPartCreation = false,
+                AllowGeometrySelection = false,
+                AllowPartSelection = true,
+                AllowScalingSelectedElement = false,
+                AllowVertexCreation = false,
+                AllowVertexSelection = false,
+                AllowRotatingSelectedElement = false,
+                RequireSelectionBeforeMove = false
+            },
+            Style = new GeometryEditorStyle
+            {
+                MidVertexSymbol = null,
+                VertexSymbol = null,
+                SelectedVertexSymbol = null,
+                SelectedMidVertexSymbol = null,
+                FeedbackVertexSymbol = null
+            }
+        };
+
+        private Geometry? _geometry;
         private Symbol? _symbol;
 
-        public MyGeometryEditorHelper(GeometryEditor editor, Geometry geometry, Symbol? symbol)
+        public void Initialize(Geometry geometry, Symbol? symbol)
         {
             _geometry = geometry;
             _symbol = symbol;
-            _editor = editor;
             PropertyChanged += OnPropertyChanged;
             if (symbol is not null)
             {
                 if (geometry is Polygon)
                 {
-                    _vertexTool.Style.FillSymbol = _rotateTool.Style.FillSymbol = _moveTool.Style.FillSymbol = symbol;
+                    _vertexTool.Style.FillSymbol = _rotateTool.Style.FillSymbol = _moveTool.Style.FillSymbol = _inactiveTool.Style.FillSymbol = symbol;
                 }
                 else if (geometry is Polyline)
                 {
-                    _vertexTool.Style.LineSymbol = _rotateTool.Style.LineSymbol = _moveTool.Style.LineSymbol = symbol;
+                    _vertexTool.Style.LineSymbol = _rotateTool.Style.LineSymbol = _moveTool.Style.LineSymbol = _inactiveTool.Style.LineSymbol = symbol;
                 }
                 else if (geometry is MapPoint || geometry is Multipoint)
                 {
                 }
             }
+            Tool = _inactiveTool;
+            Start(geometry);
         }
+
+        //public Geometry? ActiveGeometry => Geometry ?? _geometry;
 
         private void OnPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             switch(e.PropertyName)
             {
-                case nameof(GeometryEditor.IsStarted):
+                case nameof(IsStarted):
                     break;
-                case nameof(GeometryEditor.SelectedElement):
+                case nameof(SelectedElement):
                     break;
-                case nameof(GeometryEditor.Tool):
+                case nameof(Tool):
                     break;
-                case nameof(GeometryEditor.Geometry):
+                case nameof(Geometry):
+                 //   OnPropertyChanged(nameof(ActiveGeometry));
                     break;
             }
         }
 
         private void EnsureStarted()
         {
-            if (!_editor.IsStarted)
-                _editor.Start(_geometry);
+            Debug.Assert(_geometry != null, "Geometry not set");
+            if (!IsStarted)
+                Start(_geometry);
         }
         public void Move() {
-            _editor.Tool = _moveTool;
+            Tool = _moveTool;
             EnsureStarted();
-            _editor.SelectGeometry();
+            SelectGeometry();
         }
         public void EditVertices() {
-            _editor.Tool = _vertexTool;
+            Tool = _vertexTool;
             EnsureStarted();
-            _editor.ClearSelection();
+            ClearSelection();
         }
         public void Rotate() {
-            _editor.Tool = _rotateTool;
+            Tool = _rotateTool;
             EnsureStarted();
-            _editor.SelectGeometry();
+            SelectGeometry();
         }
     }
 }

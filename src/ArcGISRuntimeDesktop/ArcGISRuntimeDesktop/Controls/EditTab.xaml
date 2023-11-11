@@ -31,11 +31,11 @@
         <AppBarButton Label="Rotate" Command="{x:Bind RotateCommand}">
             <FontIcon Glyph="{StaticResource calcite_glyphicon_Rotate}" FontFamily="{StaticResource Calcite-UI-Icons}" />
         </AppBarButton>
-        <AppBarButton Label="Reshape" Command="{x:Bind ReshapeCommand}">
+        <AppBarButton Label="Reshape" Command="{x:Bind ReshapeCommand}" Visibility="{x:Bind reshapeButton.IsEnabled, Mode=OneWay}" x:Name="reshapeButton">
             <FontIcon Glyph="{StaticResource calcite_glyphicon_Shapes}" FontFamily="{StaticResource Calcite-UI-Icons}" />
         </AppBarButton>
-        <AppBarButton Label="Reshape Accept" Command="{x:Bind ReshapeAcceptCommand}">
-            <FontIcon Glyph="{StaticResource calcite_glyphicon_Shapes}" FontFamily="{StaticResource Calcite-UI-Icons}" />
+        <AppBarButton Label="Accept Reshape" Command="{x:Bind ReshapeAcceptCommand}" Visibility="{x:Bind acceptButton.IsEnabled, Mode=OneWay}" x:Name="acceptButton">
+            <FontIcon Glyph="{StaticResource calcite_glyphicon_Check}" FontFamily="{StaticResource Calcite-UI-Icons}" />
         </AppBarButton>
     </StackPanel>
 </UserControl>

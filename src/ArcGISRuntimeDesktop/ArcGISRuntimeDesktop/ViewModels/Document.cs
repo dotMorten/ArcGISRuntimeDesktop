@@ -16,9 +16,17 @@ public abstract partial class Document : BaseViewModel
         else
             model.Loaded += (s, e) => SubscribeToModel();
         Name = name.Trim();
+        GraphicsOverlays.Add(SearchResultOverlay);
+        GraphicsOverlays.Add(EditorOverlay);
     }
 
     public GeoModel GeoDocument { get; }
+
+    public GraphicsOverlayCollection GraphicsOverlays { get; } = new GraphicsOverlayCollection();
+
+    public GraphicsOverlay EditorOverlay { get; } = new GraphicsOverlay();
+
+    public GraphicsOverlay SearchResultOverlay { get; } = new GraphicsOverlay();
 
     public string Name { get; set; }
 

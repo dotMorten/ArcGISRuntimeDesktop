@@ -14,14 +14,16 @@
         <DataTemplate x:Key="mapTemplate" x:DataType="vm:MapDocument">
             <esri:MapView Map="{x:Bind Map, Mode=OneWay}" PointerMoved="GeoView_PointerMoved" Loaded="GeoView_Loaded"
                           AllowDrop="True" Drop="GeoView_Drop" GeometryEditor="{x:Bind GeometryEditor, Mode=OneWay}"
-                          DragOver="GeoView_DragOver" RightTapped="GeoView_RightTapped"
+                          DragOver="GeoView_DragOver" RightTapped="GeoView_RightTapped" GraphicsOverlays="{x:Bind GraphicsOverlays}"
                           >
             </esri:MapView>
         </DataTemplate>
         <DataTemplate x:Key="sceneTemplate" x:DataType="vm:SceneDocument">
             <esri:SceneView Scene="{x:Bind Scene, Mode=OneWay}" PointerMoved="GeoView_PointerMoved" Loaded="GeoView_Loaded" AmbientLightColor="#111111"
                             AllowDrop="True" Drop="GeoView_Drop" DragOver="GeoView_DragOver" RightTapped="GeoView_RightTapped"
-                            SunLighting="{x:Bind SunLighting, Mode=OneWay}" SunTime="{x:Bind SunTime, Mode=OneWay}" AtmosphereEffect="{x:Bind AtmosphereEffect, Mode=OneWay}" />
+                            SunLighting="{x:Bind SunLighting, Mode=OneWay}" SunTime="{x:Bind SunTime, Mode=OneWay}" 
+                            AtmosphereEffect="{x:Bind AtmosphereEffect, Mode=OneWay}" 
+                            GraphicsOverlays="{x:Bind GraphicsOverlays}"/>
         </DataTemplate>
     </UserControl.Resources>
 
